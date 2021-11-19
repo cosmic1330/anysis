@@ -1,0 +1,46 @@
+{
+  "name": "@ch20026103/anysis",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "提供分析方法的Library",
+  "keywords": ["stock","regression line"],
+  "license": "ISC",
+  "repository": "github:nodejscn/node-api-cn",
+  "author": "kim <ch20026103@yahoo.com.tw> (https://github.com/cosmic1330)",
+  "bugs": "https://github.com/nodejscn/node-api-cn/issues",
+  "contributors":[],
+  "main": "/dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint --fix \"**/*.{js,jsx,ts,tsx,mjs}\"",
+    "prettier": "prettier --write .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs}": [
+      "eslint",
+      "prettier --write .",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "lint-staged": "^12.0.3",
+    "prettier": "^2.4.1",
+    "save-dev": "^0.0.1-security",
+    "typescript": "^4.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.9",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "eslint": "^8.2.0"
+  },
+  "vota": {
+    "node": "16.11.0"
+  }
+}

@@ -1,0 +1,1 @@
+export {default as simpleRegressoinModel} from "./methods/Regression/simpleRegressoinModel";
