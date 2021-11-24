@@ -1,1 +1,2 @@
-export {default as simpleRegressoinModel} from "./methods/Regression/simpleRegressoinModel";
+export { add } from "./methods/add";
+export { minus } from "./methods/minus";
