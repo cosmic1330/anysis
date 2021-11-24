@@ -22,7 +22,7 @@
     "build:umd": "rollup dist/esm/index.js --file dist/umd/index.js --format umd --name anysis",
     "clean": "rimraf dist",
     "lint": "eslint --fix \"**/*.{js,jsx,ts,tsx,mjs}\"",
-    "prepare": "husky install && husky add .husky/pre-commit 'npx lint-staged'",
+    "prepare": "pnpm husky install && pnpm husky add .husky/pre-commit 'npx lint-staged'",
     "prettier": "prettier --write .",
     "publish": "npm publish --registry http://localhost:4873"
   },
