@@ -1,13 +1,10 @@
 {
   "name": "@ch20026103/anysis",
-  "version": "0.0.1",
-  "description": "提供分析方法的Library",
-  "keywords": [
-    "stock",
-    "regression line"
-  ],
-  "bugs": "https://github.com/nodejscn/node-api-cn/issues",
-  "repository": "github:nodejscn/node-api-cn",
+  "version": "0.0.3",
+  "description": "provide many analyze methods in the library.",
+  "keywords": [],
+  "bugs": "git@github.com:cosmic1330/anysis/issues",
+  "repository": "git@github.com:cosmic1330/anysis",
   "license": "ISC",
   "author": "kim <ch20026103@yahoo.com.tw> (https://github.com/cosmic1330)",
   "contributors": [],
@@ -22,30 +19,37 @@
     "build:umd": "rollup dist/esm/index.js --file dist/umd/index.js --format umd --name anysis",
     "clean": "rimraf dist",
     "lint": "eslint --fix \"**/*.{js,jsx,ts,tsx,mjs}\"",
-    "prepare": "pnpm husky install && pnpm husky add .husky/pre-commit 'npx lint-staged'",
-    "prettier": "prettier --write .",
-    "publish": "npm publish --registry http://localhost:4873"
+    "prepare": "pnpm exec husky install",
+    "prettier": "pnpm exec prettier --write .",
+    "prepublishOnly": "pnpm build",
+    "published": "npm publish --registry http://localhost:4873",
+    "unpublished": "npm unpublish --force --registry http://localhost:4873",
+    "test": "react-scripts test --env=node --testPathIgnorePatterns=test_data"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs}": [
-      "eslint --fix",
-      "prettier --write ."
+      "pnpm lint",
+      "pnpm exec react-scripts test --watchAll=false --testPathIgnorePatterns=test_data"
     ]
   },
-  "dependencies": {},
   "devDependencies": {
+    "@commitlint/cli": "^15.0.0",
+    "@commitlint/config-conventional": "^15.0.0",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.0.6",
-    "@types/node": "^16.11.9",
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "@typescript-eslint/parser": "^5.4.0",
-    "eslint": "^8.2.0",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^16.11.12",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
+    "eslint": "^7.32.0",
     "husky": "^7.0.4",
-    "lint-staged": "^12.1.1",
-    "prettier": "^2.4.1",
+    "lint-staged": "^12.1.2",
+    "prettier": "^2.5.1",
+    "pretty-quick": "^3.1.2",
+    "react-scripts": "^4.0.3",
     "rimraf": "^3.0.2",
-    "rollup": "^2.60.0",
-    "typescript": "^4.5.2"
+    "rollup": "^2.61.1",
+    "typescript": "^4.5.3"
   },
   "vota": {
     "node": "16.11.0"
