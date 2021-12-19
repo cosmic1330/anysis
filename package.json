@@ -6,6 +6,7 @@
   "bugs": "git@github.com:cosmic1330/anysis/issues",
   "repository": "git@github.com:cosmic1330/anysis",
   "license": "ISC",
+  "private":"true",
   "author": "kim <ch20026103@yahoo.com.tw> (https://github.com/cosmic1330)",
   "contributors": [],
   "main": "dist/cjs/index.js",
@@ -14,8 +15,8 @@
   "types": "dist/esm/index.d.ts",
   "scripts": {
     "build": "pnpm clean && pnpm build:esm && pnpm build:cjs && pnpm build:umd",
-    "build:cjs": "tsc --module commonjs --target es5 --outDir dist/cjs",
-    "build:esm": "tsc --module esnext --target es5 --outDir dist/esm",
+    "build:cjs": "tsc --noEmit false --module commonjs --target es5 --outDir dist/cjs",
+    "build:esm": "tsc --noEmit false --module esnext --target es5 --outDir dist/esm",
     "build:umd": "rollup dist/esm/index.js --file dist/umd/index.js --format umd --name anysis",
     "clean": "rimraf dist",
     "lint": "eslint --fix \"**/*.{js,jsx,ts,tsx,mjs}\"",

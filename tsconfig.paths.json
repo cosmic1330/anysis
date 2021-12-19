@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "noEmit": false,
     "baseUrl": ".",
     "paths": {
       "@": ["./src/*"]
