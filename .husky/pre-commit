@@ -3,3 +3,4 @@
 
 pnpm exec lint-staged
 pnpm exec pretty-quick --staged
+git add .
