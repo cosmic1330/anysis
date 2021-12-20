@@ -16,3 +16,4 @@ export { default as Ma } from "./stockSkills/ma.js";
 export { default as Macd } from "./stockSkills/macd.js";
 export { default as Rsi } from "./stockSkills/rsi.js";
 export { default as Williams } from "./stockSkills/williams.js";
+export { default as Gold } from "./stockSkills/gold.js";

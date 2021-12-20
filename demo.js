@@ -1,29 +1,23 @@
-import {
-  movingAverages,
-  weightMovingAverages,
-  exponentialSmoothing,
-  calcSeasonalIndicesNoTrend,
-} from "./dist/esm/index.js";
+/* eslint @typescript-eslint/no-var-requires: "off" */
+const axios = require("axios");
+const { Gold } = require("./dist/cjs/index.js");
+const gold = new Gold();
+const stockId = 2014;
 
-// forecastingModel-R
-let c = [10, 12, 13, 16, 19, 23, 26, 30, 28, 18, 16, 14];
-let d = [180, 168, 159, 175, 190, 205, 180, 182];
-let e = [74, 79, 80, 90, 105, 142, 122];
-
-// forecastingModel-RS
-let f = [
-  80, 85, 80, 110, 115, 120, 100, 110, 85, 75, 85, 80, 100, 75, 90, 90, 131,
-  110, 110, 90, 95, 85, 75, 80,
-];
-
-console.log("movingAverages", movingAverages(c, 3));
-console.log("weightMovingAverages", weightMovingAverages(c, [3, 2, 1]));
-console.log(
-  "exponentialSmoothing",
-  exponentialSmoothing(d, 0.1, { initialForecast: 175 })
-);
-console.log("exponentialSmoothing", exponentialSmoothing(e, 0.3));
-console.log(
-  "calcSeasonalIndicesNoTrend",
-  calcSeasonalIndicesNoTrend(f, 1200, 5)
-);
+axios
+  .get(
+    `https://tw.quote.finance.yahoo.net/quote/q?type=ta&perd=d&mkt=10&sym=${stockId}&v=1&callback=`,
+    { params: { ID: 123 } }
+  )
+  .then((res) => {
+    let json = res.data.match(/"ta":(\S*),"ex"/)[1];
+    let data = JSON.parse(json);
+    let goldData = gold.getGold(data);
+    console.log(goldData);
+  })
+  .catch((error) => {
+    console.error(error);
+  })
+  .finally(() => {
+    /* 不論失敗成功皆會執行 */
+  });

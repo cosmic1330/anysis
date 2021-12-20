@@ -1,4 +1,5 @@
-import getWeekLine, { ResType } from "./utils/getWeekLine";
+import getWeekLine from "./utils/getWeekLine.js";
+import type { ResType } from "./utils/getWeekLine";
 
 type ResGoldType = {
   highestPointDate: number;

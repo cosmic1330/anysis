@@ -6,7 +6,7 @@
   "bugs": "git@github.com:cosmic1330/anysis/issues",
   "repository": "git@github.com:cosmic1330/anysis",
   "license": "ISC",
-  "private":"true",
+  "private": "true",
   "author": "kim <ch20026103@yahoo.com.tw> (https://github.com/cosmic1330)",
   "contributors": [],
   "main": "dist/cjs/index.js",
@@ -24,13 +24,14 @@
     "prettier": "pnpm exec prettier --write .",
     "prepublishOnly": "pnpm build",
     "published": "npm publish --registry http://localhost:4873",
-    "unpublished": "npm unpublish --force --registry http://localhost:4873",
-    "test": "react-scripts test --env=node --testPathIgnorePatterns=test_data"
+    "unpublished": "npm unpublish --force --registry http://localhost:4873 ",
+    "test": "react-scripts test --testPathIgnorePatterns=test_data --testPathIgnorePatterns=gold",
+    "demo": "node demo.js"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs}": [
       "pnpm lint",
-      "pnpm exec react-scripts test --watchAll=false --testPathIgnorePatterns=test_data"
+      "pnpm exec react-scripts test --watchAll=false --testPathIgnorePatterns=test_data --testPathIgnorePatterns=gold"
     ]
   },
   "devDependencies": {
@@ -42,6 +43,7 @@
     "@types/node": "^16.11.12",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
+    "axios": "^0.24.0",
     "eslint": "^7.32.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.1.2",
