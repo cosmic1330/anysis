@@ -4,7 +4,7 @@ import data from "./test_data.test";
 describe("test macd methods", () => {
   it("test getEMA12()", () => {
     const macd = new Macd();
-    expect(macd.getEMA12(data)[data.length - 1]).toStrictEqual({
+    expect(macd.getEMA12(data)[data.length - 1]).toEqual({
       c: 142,
       o: 138,
       t: 20211214,
@@ -17,7 +17,7 @@ describe("test macd methods", () => {
 
   it("test getEMA26()", () => {
     const macd = new Macd();
-    expect(macd.getEMA26(data)[data.length - 1]).toStrictEqual({
+    expect(macd.getEMA26(data)[data.length - 1]).toEqual({
       c: 142,
       o: 138,
       t: 20211214,
@@ -32,7 +32,7 @@ describe("test macd methods", () => {
     const macd = new Macd();
     const Ema26 = macd.getEMA26(data);
     const Ema12 = macd.getEMA12(data);
-    expect(macd.getDIF(data, Ema12, Ema26)[data.length - 1]).toStrictEqual({
+    expect(macd.getDIF(data, Ema12, Ema26)[data.length - 1]).toEqual({
       c: 142,
       o: 138,
       t: 20211214,
@@ -48,7 +48,7 @@ describe("test macd methods", () => {
     const Ema26 = macd.getEMA26(data);
     const Ema12 = macd.getEMA12(data);
     const Dif = macd.getDIF(data, Ema12, Ema26);
-    expect(macd.getMACD9(data, Dif)[data.length - 1]).toStrictEqual({
+    expect(macd.getMACD9(data, Dif)[data.length - 1]).toEqual({
       c: 142,
       o: 138,
       t: 20211214,
@@ -62,7 +62,7 @@ describe("test macd methods", () => {
 
   it("test getMACD()", () => {
     const macd = new Macd();
-    expect(macd.getMACD(data)[data.length - 1]).toStrictEqual({
+    expect(macd.getMACD(data)[data.length - 1]).toEqual({
       c: 142,
       o: 138,
       t: 20211214,

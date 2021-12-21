@@ -4,7 +4,7 @@ import data from "./test_data.test";
 describe("test rsi methods", () => {
   it("test getRsi6()", () => {
     const rsi = new Rsi();
-    expect(rsi.getRsi6(data)[data.length - 1]).toStrictEqual({
+    expect(rsi.getRsi6(data)[data.length - 1]).toEqual({
       c: 142,
       o: 138,
       t: 20211214,
@@ -17,7 +17,7 @@ describe("test rsi methods", () => {
 
   it("test getRsi12()", () => {
     const rsi = new Rsi();
-    expect(rsi.getRsi12(data)[data.length - 1]).toStrictEqual({
+    expect(rsi.getRsi12(data)[data.length - 1]).toEqual({
       c: 142,
       o: 138,
       t: 20211214,

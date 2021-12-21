@@ -161,3 +161,5 @@ const data = [
   { t: 20211214, o: 138.0, h: 143.0, l: 138.0, c: 142.0, v: 16841 },
 ];
 export default data;
+
+test("", () => expect(true).toBe(true));

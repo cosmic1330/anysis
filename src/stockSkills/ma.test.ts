@@ -4,7 +4,7 @@ import data from "./test_data.test";
 describe("test ma methods", () => {
   it("test getMa5()", () => {
     const ma = new Ma();
-    expect(ma.getMa5(data)[data.length - 1]).toStrictEqual({
+    expect(ma.getMa5(data)[data.length - 1]).toEqual({
       c: 142,
       o: 138,
       t: 20211214,
@@ -17,7 +17,7 @@ describe("test ma methods", () => {
 
   it("test getMa10()", () => {
     const ma = new Ma();
-    expect(ma.getMa10(data)[data.length - 1]).toStrictEqual({
+    expect(ma.getMa10(data)[data.length - 1]).toEqual({
       c: 142,
       o: 138,
       t: 20211214,
@@ -30,7 +30,7 @@ describe("test ma methods", () => {
 
   it("test getMa20()", () => {
     const ma = new Ma();
-    expect(ma.getMa20(data)[data.length - 1]).toStrictEqual({
+    expect(ma.getMa20(data)[data.length - 1]).toEqual({
       c: 142,
       o: 138,
       t: 20211214,
@@ -43,7 +43,7 @@ describe("test ma methods", () => {
 
   it("test getBoll()", () => {
     const ma = new Ma();
-    expect(ma.getBoll(data)[data.length - 1]).toStrictEqual({
+    expect(ma.getBoll(data)[data.length - 1]).toEqual({
       c: 142,
       o: 138,
       t: 20211214,
@@ -58,7 +58,7 @@ describe("test ma methods", () => {
 
   it("test getAllMa()", () => {
     const ma = new Ma();
-    expect(ma.getAllMa(data)[data.length - 1]).toStrictEqual({
+    expect(ma.getAllMa(data)[data.length - 1]).toEqual({
       c: 142,
       o: 138,
       t: 20211214,

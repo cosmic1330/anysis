@@ -4,7 +4,7 @@ import data from "./test_data.test";
 describe("test williams methods", () => {
   it("test getWilliams9()", () => {
     const williams = new Williams();
-    expect(williams.getWilliams9(data)[data.length - 1]).toStrictEqual({
+    expect(williams.getWilliams9(data)[data.length - 1]).toEqual({
       c: 142,
       o: 138,
       t: 20211214,
@@ -17,7 +17,7 @@ describe("test williams methods", () => {
 
   it("test getWilliams18()", () => {
     const williams = new Williams();
-    expect(williams.getWilliams18(data)[data.length - 1]).toStrictEqual({
+    expect(williams.getWilliams18(data)[data.length - 1]).toEqual({
       c: 142,
       o: 138,
       t: 20211214,
@@ -30,7 +30,7 @@ describe("test williams methods", () => {
 
   it("test getAllWillams()", () => {
     const williams = new Williams();
-    expect(williams.getAllWillams(data)[data.length - 1]).toStrictEqual({
+    expect(williams.getAllWillams(data)[data.length - 1]).toEqual({
       c: 142,
       o: 138,
       t: 20211214,

@@ -5,7 +5,7 @@ describe("test Gold methods", () => {
   it("test findHighPoint()", () => {
     const gold = new Gold();
     const hightPoints = gold.findHighPoint(data);
-    expect(hightPoints["20211130"]).toStrictEqual({
+    expect(hightPoints["20211130"]).toEqual({
       c: 155.5,
       h: 164.5,
       l: 155,
@@ -18,7 +18,7 @@ describe("test Gold methods", () => {
   it("test findLowPoint()", () => {
     const gold = new Gold();
     const lowPoints = gold.findLowPoint(data);
-    expect(lowPoints["20211122"]).toStrictEqual({
+    expect(lowPoints["20211122"]).toEqual({
       t: 20211122,
       o: 135,
       h: 140,
@@ -31,7 +31,7 @@ describe("test Gold methods", () => {
   it("test getGold(", () => {
     const gold = new Gold();
     const allGold = gold.getGold(data);
-    expect(allGold).toStrictEqual({
+    expect(allGold).toEqual({
       highestPoint: 164.5,
       highestPointDate: 20211130,
       lowestPoint: 134,

@@ -3,11 +3,7 @@
     "baseUrl": ".",
     "target": "es5",
     "useDefineForClassFields": true,
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": true,
     "outDir": "dist",
     "skipLibCheck": false,
@@ -22,13 +18,11 @@
     "isolatedModules": true,
     "jsx": "react",
     "noFallthroughCasesInSwitch": true,
-    "noEmit": true
+    "noEmit": true,
+    "paths": {
+      "@": ["./src/*"]
+    }
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "src/react-app-env.d.ts"
-  ],
-  "extends": "./tsconfig.paths.json"
+  "include": ["src"],
+  "exclude": ["src/react-app-env.d.ts"]
 }
