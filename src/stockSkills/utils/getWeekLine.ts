@@ -66,6 +66,7 @@ export default function getWeekLine(
         collectWeekData.push(item);
         break;
       default:
+        collectWeekData.push(item);
         if (list.length - 1 === index) {
           const obj = {
             o: collectWeekData[0]["o"],
@@ -76,7 +77,6 @@ export default function getWeekLine(
           };
           res.push(addDetail(obj, collectWeekData, detail));
         }
-        collectWeekData.push(item);
         break;
     }
   });

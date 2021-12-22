@@ -18,7 +18,7 @@
     "isolatedModules": true,
     "jsx": "react",
     "noFallthroughCasesInSwitch": true,
-    "noEmit": true,
+    "noEmit": false,
     "paths": {
       "@": ["./src/*"]
     }

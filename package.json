@@ -15,9 +15,9 @@
   "types": "dist/esm/index.d.ts",
   "scripts": {
     "build": "pnpm clean && pnpm build:esm && pnpm build:cjs && pnpm build:umd",
-    "build:cjs": "tsc --noEmit false --module commonjs --target es5 --outDir dist/cjs",
-    "build:esm": "tsc --noEmit false --module esnext --target es5 --outDir dist/esm",
-    "build:umd": "rollup dist/esm/index.jpnps --file dist/umd/index.js --format umd --name anysis",
+    "build:cjs": "tsc --module commonjs --target es5 --outDir dist/cjs",
+    "build:esm": "tsc --module esnext --target es5 --outDir dist/esm",
+    "build:umd": "rollup dist/esm/index.js --file dist/umd/index.js --format umd --name anysis",
     "clean": "rimraf dist",
     "lint": "eslint --fix \"**/*.{js,jsx,ts,tsx,mjs}\"",
     "prepare": "pnpm exec husky install",
@@ -26,7 +26,6 @@
     "published": "npm publish --registry http://localhost:4873",
     "unpublished": "npm unpublish --force --registry http://localhost:4873 ",
     "test": "vitest",
-    "coverage": "vitest --coverage",
     "demo": "node demo.js"
   },
   "lint-staged": {
@@ -45,7 +44,6 @@
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
     "axios": "^0.24.0",
-    "c8": "^7.10.0",
     "eslint": "^7.32.0",
     "husky": "^7.0.4",
     "jsdom": "^19.0.0",
