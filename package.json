@@ -1,12 +1,11 @@
 {
   "name": "@ch20026103/anysis",
-  "version": "0.0.1",
+  "version": "0.0.2-alpha",
   "description": "provide many analyze methods in the library.",
   "keywords": [],
   "bugs": "git@github.com:cosmic1330/anysis/issues",
   "repository": "git@github.com:cosmic1330/anysis",
   "license": "ISC",
-  "private": "true",
   "author": "kim <ch20026103@yahoo.com.tw> (https://github.com/cosmic1330)",
   "contributors": [],
   "main": "dist/cjs/index.js",

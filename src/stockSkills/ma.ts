@@ -2,6 +2,8 @@ type ListType = { c: number }[];
 type ResMa5 = { c: number; ma5?: number }[];
 type ResMa10 = { c: number; ma10?: number }[];
 type ResMa20 = { c: number; ma20?: number }[];
+type ResMa60 = { c: number; ma60?: number }[];
+type ResMaSelf = { c: number; maSelf?: number }[];
 type ResBoll = { c: number; ma25?: number; bollUb?: number; bollLb?: number }[];
 type ResAllMa = {
   c: number;
@@ -9,6 +11,7 @@ type ResAllMa = {
   ma10?: number;
   ma20?: number;
   ma25?: number;
+  ma60?: number;
   bollUb?: number;
   bollLb?: number;
 }[];
@@ -18,6 +21,8 @@ interface MaType {
   getMa5: (list: ListType) => ResMa5;
   getMa10: (list: ListType) => ResMa10;
   getMa20: (list: ListType) => ResMa20;
+  getMa60: (list: ListType) => ResMa60;
+  getMaSelf: (list: ListType, self: number) => ResMaSelf;
   getBoll: (list: ListType) => ResBoll;
 }
 
@@ -27,6 +32,7 @@ export default class Ma implements MaType {
     const responseMa5 = this.getMa5(list);
     const responseMa10 = this.getMa10(list);
     const responseMa20 = this.getMa20(list);
+    const responseMa60 = this.getMa60(list);
     const responseBoll = this.getBoll(list);
     for (let i = 0; i < list.length; i++) {
       res[i] = Object.assign(
@@ -34,6 +40,7 @@ export default class Ma implements MaType {
         responseMa5[i],
         responseMa10[i],
         responseMa20[i],
+        responseMa60[i],
         responseBoll[i]
       );
     }
@@ -80,6 +87,36 @@ export default class Ma implements MaType {
           .reduce((pre, current) => pre + current.c, 0);
         const ma20 = Math.round((sum / 20) * 100) / 100;
         res[i] = { ...list[i], ma20 };
+      }
+    }
+    return res;
+  }
+
+  getMa60(list: ListType): ResMa60 {
+    const res = [];
+    for (let i = 0; i < list.length; i++) {
+      if (i < 59) res[i] = { ...list[i], ma60: undefined };
+      else {
+        const sum = list
+          .slice(i - 59, i + 1)
+          .reduce((pre, current) => pre + current.c, 0);
+        const ma60 = Math.round((sum / 60) * 100) / 100;
+        res[i] = { ...list[i], ma60 };
+      }
+    }
+    return res;
+  }
+
+  getMaSelf(list: ListType, self: number): ResMaSelf {
+    const res = [];
+    for (let i = 0; i < list.length; i++) {
+      if (i < (self-1)) res[i] = { ...list[i], maSelf: undefined };
+      else {
+        const sum = list
+          .slice(i - (self-1), i + 1)
+          .reduce((pre, current) => pre + current.c, 0);
+        const maSelf = Math.round((sum / self) * 100) / 100;
+        res[i] = { ...list[i], maSelf };
       }
     }
     return res;
