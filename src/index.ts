@@ -5,17 +5,18 @@
 */
 export { default as simpleRegressionModel } from "./analyze/Regression/simpleRegressoinModel.js";
 export {
+  exponentialSmoothing,
   movingAverages,
   weightMovingAverages,
-  exponentialSmoothing,
 } from "./analyze/TimeSeries/R/index.js";
 export { calcSeasonalIndicesNoTrend } from "./analyze/TimeSeries/RS/index.js";
-export { add } from "./test/add.js";
-export { minus } from "./test/minus.js";
+export { default as Gold } from "./stockSkills/gold.js";
+export { default as Kd } from "./stockSkills/kd.js";
 export { default as Ma } from "./stockSkills/ma.js";
 export { default as Macd } from "./stockSkills/macd.js";
 export { default as Rsi } from "./stockSkills/rsi.js";
-export { default as Williams } from "./stockSkills/williams.js";
-export { default as Gold } from "./stockSkills/gold.js";
 export { default as dateFormat } from "./stockSkills/utils/dateFormat.js";
 export { default as getWeekLine } from "./stockSkills/utils/getWeekLine.js";
+export { default as Williams } from "./stockSkills/williams.js";
+export { add } from "./test/add.js";
+export { minus } from "./test/minus.js";
