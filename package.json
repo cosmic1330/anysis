@@ -1,6 +1,6 @@
 {
   "name": "@ch20026103/anysis",
-  "version": "0.0.2-alpha",
+  "version": "0.0.3-alpha",
   "description": "provide many analyze methods in the library.",
   "keywords": [],
   "bugs": "git@github.com:cosmic1330/anysis/issues",
@@ -22,7 +22,7 @@
     "prepare": "pnpm exec husky install",
     "prettier": "pnpm exec prettier --write .",
     "prepublishOnly": "pnpm build",
-    "published": "npm publish --registry http://localhost:4873",
+    "published": "npm publish",
     "unpublished": "npm unpublish --force --registry http://localhost:4873 ",
     "test": "vitest",
     "demo": "node demo.js"

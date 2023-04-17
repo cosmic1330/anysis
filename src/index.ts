@@ -4,6 +4,7 @@
   但如果要支持 ES 模塊的瀏覽器 ，則需要文件擴展名(.js)。
 */
 export { default as simpleRegressionModel } from "./analyze/Regression/simpleRegressoinModel.js";
+export { default as slope } from "./analyze/Slope/index.js";
 export {
   exponentialSmoothing,
   movingAverages,
