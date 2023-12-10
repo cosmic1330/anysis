@@ -2,6 +2,19 @@ import Ma from "./ma";
 import data from "./test_data.test";
 
 describe("test ma methods", () => {
+  it("test init & next", () => {
+    const index = data.length - 1;
+    const ma = new Ma();
+    const realData = ma.getMa5(data)[index];
+    const init = ma.init(data[0], 5);
+    let res = init;
+    for (let i = 1; i <= index; i++) {
+      const item = data[i];
+      res = ma.next(item, res, 5);
+    }
+    expect(realData.ma5).toEqual(res.ma);
+  });
+
   it("test getMa5()", () => {
     const ma = new Ma();
     expect(ma.getMa5(data)[data.length - 1]).toEqual({

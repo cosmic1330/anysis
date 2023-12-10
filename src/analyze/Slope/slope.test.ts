@@ -27,4 +27,12 @@ describe("test Slope methods", () => {
     const slope = Slope(x, y);
     expect(slope).toEqual(0);
   });
+
+
+  it("test 1,4,6,8,10,12", () => {
+    const x = [1, 2, 3, 4, 5, 6];
+    const y = [1,4,6,8,10,12];
+    const slope = Slope(x, y);
+    expect(slope).toEqual(2.142857142857143);
+  });
 });

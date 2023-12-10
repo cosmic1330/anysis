@@ -2,6 +2,30 @@ import Macd from "./macd";
 import data from "./test_data.test";
 
 describe("test macd methods", () => {
+  it("test init & next", () => {
+    const index = data.length - 1;
+    const macd = new Macd();
+    const init = macd.init(data[0]);
+    let res = init;
+    for (let i = 1; i <= index; i++) {
+      const item = data[i];
+      res = macd.next(item, res);
+    }
+    expect({
+      ema12: 144.02,
+      ema26: 142.23,
+      dif: 1.79,
+      macd: 3.46,
+      osc: -1.67,
+    }).toEqual({
+      ema12: res.ema12,
+      ema26: res.ema26,
+      dif: res.dif?.[res.dif?.length - 1],
+      macd: res.macd,
+      osc: res.osc,
+    });
+  });
+  
   it("test getEMA12()", () => {
     const macd = new Macd();
     expect(macd.getEMA12(data)[data.length - 1]).toEqual({

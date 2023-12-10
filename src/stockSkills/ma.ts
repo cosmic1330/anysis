@@ -1,4 +1,5 @@
-type ListType = { c: number }[];
+type DataType = { c: number };
+type ListType = DataType[];
 type ResMa5 = { c: number; ma5?: number }[];
 type ResMa10 = { c: number; ma10?: number }[];
 type ResMa20 = { c: number; ma20?: number }[];
@@ -17,6 +18,15 @@ type ResAllMa = {
 }[];
 
 interface MaType {
+  init: (
+    data: DataType,
+    type: number
+  ) => { dataset: ListType; ma: number; type: number };
+  next: (
+    data: DataType,
+    preList: { dataset: ListType; ma: number; type: number },
+    type: number
+  ) => { dataset: ListType; ma: number; type: number };
   getAllMa: (list: ListType) => ResAllMa;
   getMa5: (list: ListType) => ResMa5;
   getMa10: (list: ListType) => ResMa10;
@@ -27,6 +37,26 @@ interface MaType {
 }
 
 export default class Ma implements MaType {
+  init(data: DataType, type: number) {
+    return { dataset: [data], ma: 0, type };
+  }
+  next(
+    data: DataType,
+    preList: { dataset: ListType; ma: number; type: number },
+    type: number
+  ) {
+    preList.dataset.push(data);
+    if (preList.dataset.length < type) {
+      return { dataset: preList.dataset, ma: 0, type };
+    } else {
+      if (preList.dataset.length > type) {
+        preList.dataset.shift();
+      }
+      const sum = preList.dataset.reduce((pre, current) => pre + current.c, 0);
+      const ma = Math.round((sum / type) * 100) / 100;
+      return { dataset: preList.dataset, ma, type };
+    }
+  }
   getAllMa(list: ListType): ResAllMa {
     const res = [];
     const responseMa5 = this.getMa5(list);
@@ -110,10 +140,10 @@ export default class Ma implements MaType {
   getMaSelf(list: ListType, self: number): ResMaSelf {
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < (self-1)) res[i] = { ...list[i], maSelf: undefined };
+      if (i < self - 1) res[i] = { ...list[i], maSelf: undefined };
       else {
         const sum = list
-          .slice(i - (self-1), i + 1)
+          .slice(i - (self - 1), i + 1)
           .reduce((pre, current) => pre + current.c, 0);
         const maSelf = Math.round((sum / self) * 100) / 100;
         res[i] = { ...list[i], maSelf };

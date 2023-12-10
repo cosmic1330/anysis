@@ -2,7 +2,8 @@ interface KdType {
   getRSV: (list: ListType) => ResRSV;
   getKD: (list: ListType) => ResKD;
 }
-type ListType = { c: number; h: number; l: number }[];
+type DataType = { c: number; h: number; l: number };
+type ListType = DataType[];
 type ResRSV = { c: number; rsv?: number }[];
 type ResKD = {
   c: number;
@@ -12,6 +13,68 @@ type ResKD = {
   "k-d"?: number;
 }[];
 export default class Kd implements KdType {
+  init(data: DataType): {
+    dataset: ListType;
+    rsv?: number;
+    k?: number;
+    d?: number;
+    "k-d"?: number;
+  } {
+    return {
+      dataset: [data],
+      rsv: undefined,
+      k: undefined,
+      d: undefined,
+      "k-d": undefined,
+    };
+  }
+
+  next(
+    data: DataType,
+    preList: {
+      dataset: ListType;
+      rsv?: number;
+      k?: number;
+      d?: number;
+      "k-d"?: number;
+    },
+    type: number
+  ) {
+    preList.dataset.push(data);
+
+    if (preList.dataset.length < type) {
+      return {
+        dataset: preList.dataset,
+        rsv: undefined,
+        k: undefined,
+        d: undefined,
+        "k-d": undefined,
+      };
+    } else {
+      if (preList.dataset.length > type) {
+        preList.dataset.shift();
+      }
+      const low = Math.min(...preList.dataset.map((item) => item.l));
+      const hight = Math.max(...preList.dataset.map((item) => item.h));
+      const close = data.c;
+      let rsv = ((close - low) / (hight - low)) * 100;
+      rsv = Math.round(rsv * 100) / 100;
+      let k = (2 / 3) * (preList.k ? preList.k : 50) + (1 / 3) * rsv;
+      let d = (2 / 3) * (preList.d ? preList.d : 50) + (1 / 3) * k;
+      let k_d = k - d;
+      k = Math.round(k * 100) / 100;
+      d = Math.round(d * 100) / 100;
+      k_d = Math.round(k_d * 100) / 100;
+      return {
+        dataset: preList.dataset,
+        rsv,
+        k,
+        d,
+        "k-d": k_d,
+      };
+    }
+  }
+
   getRSV(list: ListType) {
     const res = [];
     for (let i = 0; i < list.length; i++) {
