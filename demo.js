@@ -1,7 +1,7 @@
 /* eslint @typescript-eslint/no-var-requires: "off" */
 const axios = require("axios");
-const { Macd } = require("./dist/cjs/index.js");
-const macd = new Macd();
+const { Obv } = require("./dist/cjs/index.js");
+const obv = new Obv();
 const stockId = 1101;
 
 axios
@@ -11,11 +11,11 @@ axios
   .then((res) => {
     let json = res.data.match(/"ta":(\S*),"ex"/)[1];
     let data = JSON.parse(json);
-    let macdData = macd.init(data[0]);
+    let obvData = obv.init(data[0]);
     for (let i = 1; i < data.length; i++) {
-      macdData = macd.next(data[i], macdData);
+      obvData = obv.next(data[i], obvData);
     }
-    console.log(macdData);
+    console.log(obvData);
   })
   .catch((error) => {
     console.error(error);
