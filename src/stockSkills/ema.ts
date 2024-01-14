@@ -1,6 +1,6 @@
 interface EmaType {
   getStartEma: (list: number[], period: number) => number;
-  getEma: (list: number[], period: number) => (number | undefined)[];
+  getEma: (list: number[], period: number) => (number | null)[];
 }
 export default class Ema implements EmaType {
   getStartEma(list: number[], period: number): number {
@@ -13,12 +13,12 @@ export default class Ema implements EmaType {
     return initialEMA;
   }
 
-  getEma(list: number[], period: number): (number | undefined)[] {
+  getEma(list: number[], period: number): (number | null)[] {
     const res = [];
     let ema = this.getStartEma(list.slice(0, period), period);
     for (let i = 0; i < list.length; i++) {
       if (i < period) {
-        res.push(undefined);
+        res.push(null);
         continue;
       }
       ema = (list[i] * 2 + (period - 1) * ema) / (period + 1);

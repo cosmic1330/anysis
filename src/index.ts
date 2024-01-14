@@ -21,5 +21,6 @@ export { default as Ema } from "./stockSkills/ema.js";
 export { default as dateFormat } from "./stockSkills/utils/dateFormat.js";
 export { default as getWeekLine } from "./stockSkills/utils/getWeekLine.js";
 export { default as Williams } from "./stockSkills/williams.js";
+export { default as Boll } from "./stockSkills/boll.js";
 export { add } from "./test/add.js";
 export { minus } from "./test/minus.js";

@@ -1,7 +1,7 @@
 type ListType = { c: number }[];
-type ResRsi6Type = { c: number; rsi6?: number }[];
-type ResRsi12Type = { c: number; rsi12?: number }[];
-type ResAllRsiType = { c: number; rsi6?: number; rsi12?: number }[];
+type ResRsi6Type = { c: number; rsi6: number | null }[];
+type ResRsi12Type = { c: number; rsi12: number | null }[];
+type ResAllRsiType = { c: number; rsi6: number | null; rsi12: number | null }[];
 
 interface RsiType {
   getRsi6: (list: ListType) => ResRsi6Type;
@@ -25,7 +25,7 @@ export default class Rsi implements RsiType {
     const res = [];
     // 前5筆
     for (let i = 0; i < 5; i++) {
-      res[i] = { ...list[i], rsi6: undefined };
+      res[i] = { ...list[i], rsi6: null };
     }
 
     // 第6筆Rsi
@@ -58,7 +58,7 @@ export default class Rsi implements RsiType {
     const res = [];
     // 前11筆
     for (let i = 0; i < 11; i++) {
-      res[i] = { ...list[i], rsi12: undefined };
+      res[i] = { ...list[i], rsi12: null };
     }
 
     // 第12筆Rsi

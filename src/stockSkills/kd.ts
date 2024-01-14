@@ -4,28 +4,28 @@ interface KdType {
 }
 type DataType = { c: number; h: number; l: number };
 type ListType = DataType[];
-type ResRSV = { c: number; rsv?: number }[];
+type ResRSV = { c: number; rsv: number | null }[];
 type ResKD = {
   c: number;
-  rsv?: number;
-  k?: number;
-  d?: number;
-  "k-d"?: number;
+  rsv: number | null;
+  k: number | null;
+  d: number | null;
+  "k-d": number | null;
 }[];
 export default class Kd implements KdType {
   init(data: DataType): {
     dataset: ListType;
-    rsv?: number;
-    k?: number;
-    d?: number;
-    "k-d"?: number;
+    rsv: number | null;
+    k: number | null;
+    d: number | null;
+    "k-d": number | null;
   } {
     return {
       dataset: [data],
-      rsv: undefined,
-      k: undefined,
-      d: undefined,
-      "k-d": undefined,
+      rsv: null,
+      k: null,
+      d: null,
+      "k-d": null,
     };
   }
 
@@ -33,10 +33,10 @@ export default class Kd implements KdType {
     data: DataType,
     preList: {
       dataset: ListType;
-      rsv?: number;
-      k?: number;
-      d?: number;
-      "k-d"?: number;
+      rsv: number | null;
+      k: number | null;
+      d: number | null;
+      "k-d": number | null;
     },
     type: number
   ) {
@@ -45,10 +45,10 @@ export default class Kd implements KdType {
     if (preList.dataset.length < type) {
       return {
         dataset: preList.dataset,
-        rsv: undefined,
-        k: undefined,
-        d: undefined,
-        "k-d": undefined,
+        rsv: null,
+        k: null,
+        d: null,
+        "k-d": null,
       };
     } else {
       if (preList.dataset.length > type) {
@@ -78,7 +78,7 @@ export default class Kd implements KdType {
   getRSV(list: ListType) {
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < 8) res[i] = { ...list[i], rsv: undefined };
+      if (i < 8) res[i] = { ...list[i], rsv: null };
       else {
         const low = Math.min(...list.slice(i - 8, i + 1).map((item) => item.l));
         const hight = Math.max(
@@ -101,10 +101,10 @@ export default class Kd implements KdType {
       if (i < 8)
         res[i] = {
           ...list[i],
-          rsv: undefined,
-          k: undefined,
-          d: undefined,
-          "k-d": undefined,
+          rsv: null,
+          k: null,
+          d: null,
+          "k-d": null,
         };
       else {
         const low = Math.min(...list.slice(i - 8, i + 1).map((item) => item.l));

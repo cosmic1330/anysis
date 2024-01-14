@@ -1,51 +1,51 @@
 type ItemType = { h: number; l: number; c: number };
-type ResEMA12Type = { h: number; l: number; c: number; EMA12?: number }[];
-type ResEMA26Type = { h: number; l: number; c: number; EMA26?: number }[];
-type ResDifType = { h: number; l: number; c: number; DIF?: number }[];
+type ResEMA12Type = { h: number; l: number; c: number; EMA12: number | null }[];
+type ResEMA26Type = { h: number; l: number; c: number; EMA26: number | null }[];
+type ResDifType = { h: number; l: number; c: number; DIF: number | null }[];
 type ResMacd9Type = {
   h: number;
   l: number;
   c: number;
-  MACD9?: number;
-  OSC?: number;
+  MACD9: number | null;
+  OSC: number | null;
 }[];
 type ResAllMacdType = {
   h: number;
   l: number;
   c: number;
-  EMA12?: number;
-  EMA26?: number;
-  DIF?: number;
-  MACD9?: number;
-  OSC?: number;
+  EMA12: number | null;
+  EMA26: number | null;
+  DIF: number | null;
+  MACD9: number | null;
+  OSC: number | null;
 }[];
 
 interface MacdType {
   init: (data: ItemType) => {
     dataset: ItemType[];
-    ema12?: number;
-    ema26?: number;
+    ema12: number | null;
+    ema26: number | null;
     dif: number[];
-    macd?: number;
-    osc?: number;
+    macd: number | null;
+    osc: number | null;
   };
   next: (
     data: ItemType,
     preList: {
       dataset: ItemType[];
-      ema12?: number;
-      ema26?: number;
+      ema12: number | null;
+      ema26: number | null;
       dif: number[];
-      macd?: number;
-      osc?: number;
+      macd: number | null;
+      osc: number | null;
     }
   ) => {
     dataset: ItemType[];
-    ema12?: number;
-    ema26?: number;
+    ema12: number | null;
+    ema26: number | null;
     dif: number[];
-    macd?: number;
-    osc?: number;
+    macd: number | null;
+    osc: number | null;
   };
   getMACD: (list: ItemType[]) => ResAllMacdType;
   getDI: (item: ItemType) => number;
@@ -62,19 +62,19 @@ interface MacdType {
 export default class MACD implements MacdType {
   init(data: ItemType): {
     dataset: ItemType[];
-    ema12?: number;
-    ema26?: number;
+    ema12: number | null;
+    ema26: number | null;
     dif: number[];
-    macd?: number;
-    osc?: number;
+    macd: number | null;
+    osc: number | null;
   } {
     return {
       dataset: [data],
-      ema12: undefined,
-      ema26: undefined,
+      ema12: null,
+      ema26: null,
       dif: [],
-      macd: undefined,
-      osc: undefined,
+      macd: null,
+      osc: null,
     };
   }
 
@@ -82,17 +82,17 @@ export default class MACD implements MacdType {
     data: ItemType,
     preList: {
       dataset: ItemType[];
-      ema12?: number;
-      ema26?: number;
+      ema12: number | null;
+      ema26: number | null;
       dif: number[];
-      macd?: number;
-      osc?: number;
+      macd: number | null;
+      osc: number | null;
     }
   ) {
     preList.dataset.push(data);
     if (preList.dataset.length > 34) preList.dataset.shift();
     // EMA12
-    let ema12 = undefined;
+    let ema12 = null;
     if (preList.dataset.length === 12) {
       ema12 = this.getStartEMA(preList.dataset);
       ema12 = (ema12 * 11) / 13 + (this.getDI(data) * 2) / 13;
@@ -103,7 +103,7 @@ export default class MACD implements MacdType {
     }
 
     // EMA26
-    let ema26 = undefined;
+    let ema26 = null;
     if (preList.dataset.length === 26) {
       ema26 = this.getStartEMA(preList.dataset);
       ema26 = (ema26 * 25) / 27 + (this.getDI(data) * 2) / 27;
@@ -114,7 +114,7 @@ export default class MACD implements MacdType {
     }
 
     // DIF
-    let dif = undefined;
+    let dif = null;
     if (ema12 && ema26) {
       dif = ema12 - ema26;
       dif = Math.round(dif * 100) / 100;
@@ -123,10 +123,10 @@ export default class MACD implements MacdType {
     }
 
     // MACD & OSC
-    let macd = undefined;
-    let osc = undefined;
+    let macd = null;
+    let osc = null;
     if (preList.dif.length === 9) {
-      if (preList.macd === undefined) {
+      if (preList.macd === null) {
         macd = preList.dif.reduce(
           (accumulator, currentValue) => accumulator + currentValue
         );
@@ -164,7 +164,7 @@ export default class MACD implements MacdType {
     const DIF = this.getDIF(list, EMA12, EMA26);
     const MACD9 = this.getMACD9(list, DIF);
     for (let i = 0; i < list.length; i++) {
-      res[i] = Object.assign(list[i], DIF[i], MACD9[i]);
+      res[i] = Object.assign(list[i], DIF[i], MACD9[i], EMA12[i], EMA26[i]);
     }
     return res;
   }
@@ -186,7 +186,7 @@ export default class MACD implements MacdType {
     let beforeEMA12 = this.getStartEMA(start);
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < 12) res[i] = { ...list[i], EMA12: undefined };
+      if (i < 12) res[i] = { ...list[i], EMA12: null };
       else {
         beforeEMA12 = (beforeEMA12 * 11) / 13 + (this.getDI(list[i]) * 2) / 13;
         res[i] = { ...list[i], EMA12: beforeEMA12 };
@@ -200,7 +200,7 @@ export default class MACD implements MacdType {
     let beforeEMA26 = this.getStartEMA(start);
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < 26) res[i] = { ...list[i], EMA26: undefined };
+      if (i < 26) res[i] = { ...list[i], EMA26: null };
       else {
         beforeEMA26 = (beforeEMA26 * 25) / 27 + (this.getDI(list[i]) * 2) / 27;
         res[i] = { ...list[i], EMA26: beforeEMA26 };
@@ -216,7 +216,7 @@ export default class MACD implements MacdType {
   ): ResDifType {
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < 26) res[i] = { ...list[i], DIF: undefined };
+      if (i < 26) res[i] = { ...list[i], DIF: null };
       else {
         const EMA12 = ResEMA12?.[i]?.["EMA12"] && ResEMA12[i]["EMA12"];
         const EMA26 = ResEMA26?.[i]?.["EMA26"] && ResEMA26[i]["EMA26"];
@@ -231,7 +231,7 @@ export default class MACD implements MacdType {
     const res = [];
     let beforeMACD9 = 0;
     for (let i = 0; i < list.length; i++) {
-      if (i < 26) res[i] = { ...list[i], MACD9: undefined, OSC: undefined };
+      if (i < 26) res[i] = { ...list[i], MACD9: null, OSC: null };
       else if (i === 26) {
         const MACD9 = DIF.slice(26, 34)
           .map((item) => (item?.DIF ? item["DIF"] : 0))

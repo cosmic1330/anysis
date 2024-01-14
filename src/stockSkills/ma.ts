@@ -1,20 +1,17 @@
 type DataType = { c: number };
 type ListType = DataType[];
-type ResMa5 = { c: number; ma5?: number }[];
-type ResMa10 = { c: number; ma10?: number }[];
-type ResMa20 = { c: number; ma20?: number }[];
-type ResMa60 = { c: number; ma60?: number }[];
-type ResMaSelf = { c: number; maSelf?: number }[];
-type ResBoll = { c: number; ma25?: number; bollUb?: number; bollLb?: number }[];
+type ResMa5 = { c: number; ma5: number | null }[];
+type ResMa10 = { c: number; ma10: number | null }[];
+type ResMa20 = { c: number; ma20: number | null }[];
+type ResMa60 = { c: number; ma60: number | null }[];
+type ResMa = { c: number; ma: number | null }[];
 type ResAllMa = {
   c: number;
-  ma5?: number;
-  ma10?: number;
-  ma20?: number;
-  ma25?: number;
-  ma60?: number;
-  bollUb?: number;
-  bollLb?: number;
+  ma5: number | null;
+  ma10: number | null;
+  ma20: number | null;
+  ma25: number | null;
+  ma60: number | null;
 }[];
 
 interface MaType {
@@ -32,8 +29,7 @@ interface MaType {
   getMa10: (list: ListType) => ResMa10;
   getMa20: (list: ListType) => ResMa20;
   getMa60: (list: ListType) => ResMa60;
-  getMaSelf: (list: ListType, self: number) => ResMaSelf;
-  getBoll: (list: ListType) => ResBoll;
+  getMa: (list: ListType, self: number) => ResMa;
 }
 
 export default class Ma implements MaType {
@@ -63,15 +59,13 @@ export default class Ma implements MaType {
     const responseMa10 = this.getMa10(list);
     const responseMa20 = this.getMa20(list);
     const responseMa60 = this.getMa60(list);
-    const responseBoll = this.getBoll(list);
     for (let i = 0; i < list.length; i++) {
       res[i] = Object.assign(
         list[i],
         responseMa5[i],
         responseMa10[i],
         responseMa20[i],
-        responseMa60[i],
-        responseBoll[i]
+        responseMa60[i]
       );
     }
     return res;
@@ -80,7 +74,7 @@ export default class Ma implements MaType {
   getMa5(list: ListType): ResMa5 {
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < 4) res[i] = { ...list[i], ma5: undefined };
+      if (i < 4) res[i] = { ...list[i], ma5: null };
       else {
         const sum = list
           .slice(i - 4, i + 1)
@@ -95,7 +89,7 @@ export default class Ma implements MaType {
   getMa10(list: ListType): ResMa10 {
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < 9) res[i] = { ...list[i], ma10: undefined };
+      if (i < 9) res[i] = { ...list[i], ma10: null };
       else {
         const sum = list
           .slice(i - 9, i + 1)
@@ -110,7 +104,7 @@ export default class Ma implements MaType {
   getMa20(list: ListType): ResMa20 {
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < 19) res[i] = { ...list[i], ma20: undefined };
+      if (i < 19) res[i] = { ...list[i], ma20: null };
       else {
         const sum = list
           .slice(i - 19, i + 1)
@@ -125,7 +119,7 @@ export default class Ma implements MaType {
   getMa60(list: ListType): ResMa60 {
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < 59) res[i] = { ...list[i], ma60: undefined };
+      if (i < 59) res[i] = { ...list[i], ma60: null };
       else {
         const sum = list
           .slice(i - 59, i + 1)
@@ -137,52 +131,16 @@ export default class Ma implements MaType {
     return res;
   }
 
-  getMaSelf(list: ListType, self: number): ResMaSelf {
+  getMa(list: ListType, self: number): ResMa {
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < self - 1) res[i] = { ...list[i], maSelf: undefined };
+      if (i < self - 1) res[i] = { ...list[i], ma: null };
       else {
         const sum = list
           .slice(i - (self - 1), i + 1)
           .reduce((pre, current) => pre + current.c, 0);
-        const maSelf = Math.round((sum / self) * 100) / 100;
-        res[i] = { ...list[i], maSelf };
-      }
-    }
-    return res;
-  }
-
-  getBoll(list: ListType): ResBoll {
-    const res = [];
-    for (let i = 0; i < list.length; i++) {
-      if (i < 24)
-        res[i] = {
-          ...list[i],
-          ma25: undefined,
-          bollUb: undefined,
-          bollLb: undefined,
-        };
-      else {
-        // ma25
-        const sumMa25: number = list
-          .slice(i - 24, i + 1)
-          .reduce((pre, current) => pre + current.c, 0);
-        const ma25: number = Math.round((sumMa25 / 25) * 100) / 100;
-        // 標準差
-        const sumBase: number = res
-          .slice(i - 24, i + 1)
-          .reduce((pre, current) => {
-            return ma25 !== undefined
-              ? pre + Math.pow(current.c - ma25, 2)
-              : pre;
-          }, 0);
-        const base: number = Math.round(Math.sqrt(sumBase / 25) * 100) / 100;
-        res[i] = {
-          ...list[i],
-          ma25,
-          bollUb: ma25 + 2 * base,
-          bollLb: ma25 - 2 * base,
-        };
+        const ma = Math.round((sum / self) * 100) / 100;
+        res[i] = { ...list[i], ma };
       }
     }
     return res;

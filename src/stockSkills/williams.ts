@@ -1,10 +1,10 @@
 type ListType = { h: number; l: number; c: number }[];
-type ResWilliams9Type = { c: number; williams9?: number }[];
-type ResWilliams18Type = { c: number; williams18?: number }[];
+type ResWilliams9Type = { c: number; williams9: number | null }[];
+type ResWilliams18Type = { c: number; williams18: number | null }[];
 type ResAllWilliamsType = {
   c: number;
-  williams18?: number;
-  williams9?: number;
+  williams18: number | null;
+  williams9: number | null;
 }[];
 
 interface WilliamsType {
@@ -26,7 +26,7 @@ export default class Williams implements WilliamsType {
   getWilliams9(list: ListType): ResWilliams9Type {
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < 9) res[i] = { ...list[i], williams9: undefined };
+      if (i < 9) res[i] = { ...list[i], williams9: null };
       else {
         const maxList = list.slice(i - 8, i).map((item) => item["h"]);
         const minList = list.slice(i - 8, i).map((item) => item["l"]);
@@ -43,7 +43,7 @@ export default class Williams implements WilliamsType {
   getWilliams18(list: ListType): ResWilliams18Type {
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < 18) res[i] = { ...list[i], williams9: undefined };
+      if (i < 18) res[i] = { ...list[i], williams18: null };
       else {
         const maxList = list.slice(i - 17, i).map((item) => item["h"]);
         const minList = list.slice(i - 17, i).map((item) => item["l"]);
