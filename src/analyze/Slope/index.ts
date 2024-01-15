@@ -1,5 +1,6 @@
-export default function Slope(x: number[], y: number[]): number {
+export default function Slope(y: number[]): number {
     // 計算 x 和 y 的平均值
+    const x = Array.from({ length: y.length }, (_, k) => k + 1);
     const x_mean = x.reduce((acc, cur) => acc + cur) / x.length;
     const y_mean = y.reduce((acc, cur) => acc + cur) / y.length;
 

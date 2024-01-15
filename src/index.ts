@@ -25,3 +25,4 @@ export { default as Williams } from "./stockSkills/williams.js";
 export { add } from "./test/add.js";
 export { minus } from "./test/minus.js";
 export { default as isJSON } from "./utils/isJson.js";
+export { default as parseLsusbOutput } from "./utils/parseLsusbOutput.js";
