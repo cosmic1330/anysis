@@ -25,7 +25,7 @@
     "published": "npm publish",
     "unpublished": "npm unpublish --force --registry http://localhost:4873 ",
     "test": "vitest",
-    "demo": "node demo.js"
+    "demo": "node demo/main.js"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs}": [

@@ -16,6 +16,7 @@ export { default as Ema } from "./stockSkills/ema.js";
 export { default as Gold } from "./stockSkills/gold.js";
 export { default as Kd } from "./stockSkills/kd.js";
 export { default as Ma } from "./stockSkills/ma.js";
+export { default as Vma } from "./stockSkills/vma.js";
 export { default as Macd } from "./stockSkills/macd.js";
 export { default as Obv } from "./stockSkills/obv.js";
 export { default as Rsi } from "./stockSkills/rsi.js";

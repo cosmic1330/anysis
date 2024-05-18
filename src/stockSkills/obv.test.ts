@@ -4,13 +4,13 @@ import { data_9904 as data } from "./test_data.test";
 describe("test obv methods", () => {
   it("test init", () => {
     const obv = new Obv();
-    const init = obv.init(data[0]);
+    const init = obv.init(data[0], 5);
     let res = init;
     for (let i = 1; i < data.length; i++) {
       const item = data[i];
-      res = obv.next(item, res);
+      res = obv.next(item, res, 5);
     }
-    expect(res.obv).toEqual(504538);
+    expect({ obv: res.obv, obvMa: res.obvMa }).toEqual({ obv: 504538 , obvMa: 494302.2});
   });
 
   it("test getObv()", () => {
