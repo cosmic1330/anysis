@@ -102,8 +102,11 @@ function DemoWeek() {
       console.log({
         t: weekMaData5.dataset[weekMaData5.dataset.length - 1].t,
         ma5: weekMaData5.ma,
+        ma5ExclusionValue: weekMaData5.exclusionValue,
         ma10: weekMaData10.ma,
+        ma10ExclusionValue: weekMaData10.exclusionValue,
         ma20: weekMaData20.ma,
+        ma20ExclusionValue: weekMaData20.exclusionValue,
       });
     })
     .catch((error) => {
@@ -114,9 +117,9 @@ function DemoWeek() {
     });
 }
 
-DemoDay();
+// DemoDay();
 
-const showWeek = false;
+const showWeek = true;
 if (showWeek) {
   DemoWeek();
 }

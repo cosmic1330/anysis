@@ -1,4 +1,4 @@
-type DataType = { c: number };
+type DataType = { c: number; [key: string]: unknown };
 type ListType = DataType[];
 type ResMa5 = { c: number; ma5: number | null }[];
 type ResMa10 = { c: number; ma10: number | null }[];
@@ -18,12 +18,27 @@ interface MaType {
   init: (
     data: DataType,
     type: number
-  ) => { dataset: ListType; ma: number; type: number };
+  ) => {
+    dataset: ListType;
+    ma: number;
+    type: number;
+    exclusionValue: { d: number; "d-1": number };
+  };
   next: (
     data: DataType,
-    preList: { dataset: ListType; ma: number; type: number },
+    preList: {
+      dataset: ListType;
+      ma: number;
+      type: number;
+      exclusionValue: { d: number; "d-1": number };
+    },
     type: number
-  ) => { dataset: ListType; ma: number; type: number };
+  ) => {
+    dataset: ListType;
+    ma: number;
+    type: number;
+    exclusionValue: { d: number; "d-1": number };
+  };
   getAllMa: (list: ListType) => ResAllMa;
   getMa5: (list: ListType) => ResMa5;
   getMa10: (list: ListType) => ResMa10;
@@ -34,7 +49,7 @@ interface MaType {
 
 export default class Ma implements MaType {
   init(data: DataType, type: number) {
-    return { dataset: [data], ma: 0, type };
+    return { dataset: [data], ma: 0, type, exclusionValue: { d: 0, "d-1": 0 } };
   }
   next(
     data: DataType,
@@ -43,14 +58,23 @@ export default class Ma implements MaType {
   ) {
     preList.dataset.push(data);
     if (preList.dataset.length < type) {
-      return { dataset: preList.dataset, ma: 0, type };
+      return {
+        dataset: preList.dataset,
+        ma: 0,
+        type,
+        exclusionValue: { d: 0, "d-1": 0 },
+      };
     } else {
+      const exclusionValue = { d: preList.dataset[0].c, "d-1": 0 };
       if (preList.dataset.length > type) {
+        exclusionValue["d-1"] = exclusionValue.d;
         preList.dataset.shift();
+        exclusionValue.d = preList.dataset[0].c;
       }
+
       const sum = preList.dataset.reduce((pre, current) => pre + current.c, 0);
       const ma = Math.round((sum / type) * 100) / 100;
-      return { dataset: preList.dataset, ma, type };
+      return { dataset: preList.dataset, ma, type, exclusionValue };
     }
   }
   getAllMa(list: ListType): ResAllMa {
