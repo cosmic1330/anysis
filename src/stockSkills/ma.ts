@@ -22,7 +22,7 @@ interface MaType {
     dataset: ListType;
     ma: number;
     type: number;
-    exclusionValue: { d: number; "d-1": number };
+    exclusionValue: { "d+1": number; d: number; "d-1": number };
   };
   next: (
     data: DataType,
@@ -30,14 +30,14 @@ interface MaType {
       dataset: ListType;
       ma: number;
       type: number;
-      exclusionValue: { d: number; "d-1": number };
+      exclusionValue: { "d+1": number; d: number; "d-1": number };
     },
     type: number
   ) => {
     dataset: ListType;
     ma: number;
     type: number;
-    exclusionValue: { d: number; "d-1": number };
+    exclusionValue: { "d+1": number; d: number; "d-1": number };
   };
   getAllMa: (list: ListType) => ResAllMa;
   getMa5: (list: ListType) => ResMa5;
@@ -49,7 +49,7 @@ interface MaType {
 
 export default class Ma implements MaType {
   init(data: DataType, type: number) {
-    return { dataset: [data], ma: 0, type, exclusionValue: { d: 0, "d-1": 0 } };
+    return { dataset: [data], ma: 0, type, exclusionValue: { "d+1":0, d: 0, "d-1": 0 } };
   }
   next(
     data: DataType,
@@ -62,13 +62,14 @@ export default class Ma implements MaType {
         dataset: preList.dataset,
         ma: 0,
         type,
-        exclusionValue: { d: 0, "d-1": 0 },
+        exclusionValue: { "d+1":0, d: 0, "d-1": 0 },
       };
     } else {
-      const exclusionValue = { d: preList.dataset[0].c, "d-1": 0 };
+      const exclusionValue = { "d+1":preList.dataset[1].c, d: preList.dataset[0].c, "d-1": 0 };
       if (preList.dataset.length > type) {
         exclusionValue["d-1"] = exclusionValue.d;
         preList.dataset.shift();
+        exclusionValue["d+1"] = preList.dataset[1].c;
         exclusionValue.d = preList.dataset[0].c;
       }
 

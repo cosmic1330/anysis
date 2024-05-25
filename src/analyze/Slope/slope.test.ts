@@ -13,7 +13,7 @@ describe("test Slope methods", () => {
   });
 
   it("test 654321", () => {
-    const y = [6, 5, 4, 3, 2, 1];
+    const y = [60, 50, 40, 30, 20, 10];
     const slope = Slope(y);
     expect(slope).toEqual(-1);
   });
@@ -24,9 +24,8 @@ describe("test Slope methods", () => {
     expect(slope).toEqual(0);
   });
 
-
   it("test 1,4,6,8,10,12", () => {
-    const y = [1,4,6,8,10,12];
+    const y = [1, 4, 6, 8, 10, 12];
     const slope = Slope(y);
     expect(slope).toEqual(2.142857142857143);
   });
