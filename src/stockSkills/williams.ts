@@ -9,7 +9,6 @@ type ResAllWilliamsType = {
 }[];
 
 interface WilliamsType {
-
   init: (
     data: DataType,
     type: number

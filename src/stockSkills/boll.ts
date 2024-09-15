@@ -1,4 +1,4 @@
-type ItemType = { c: number };
+type ItemType = { c: number; [key: string]: unknown };
 type ListType = ItemType[];
 type ResBoll = {
   c: number;
@@ -107,7 +107,6 @@ export default class Boll implements BollType {
         const sumMa: number = list
           .slice(i - (type - 1), i + 1)
           .reduce((pre, current) => pre + current.c, 0);
-        console.log("sumMa", sumMa);
         const bollMa: number = Math.round((sumMa / type) * 100) / 100;
         // 標準差
         const difference: number = res

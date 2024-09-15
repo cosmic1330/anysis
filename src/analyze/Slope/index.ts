@@ -4,7 +4,6 @@ export default function Slope(y: number[]): number {
   const y_mean = y.reduce((acc, cur) => acc + cur) / y.length;
 
   const increment = calculateDivisionFactor(y_mean);
-  console.log(y_mean, increment);
   const x = Array.from({ length: y.length }, (_, index) => index * increment);
   const x_mean = x.reduce((acc, cur) => acc + cur) / x.length;
 

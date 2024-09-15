@@ -7,6 +7,12 @@ export { default as Angle } from "./analyze/Angle/index.js";
 export { default as simpleRegressionModel } from "./analyze/Regression/simpleRegressoinModel.js";
 export { default as slope } from "./analyze/Slope/index.js";
 export {
+  SwingExtremes,
+  findPeaksByGradient,
+  findTroughByGradient,
+  SwingExtremesType,
+} from "./analyze/SwingExtremes/index.js";
+export {
   exponentialSmoothing,
   movingAverages,
   weightMovingAverages,
