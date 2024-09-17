@@ -30,17 +30,15 @@ describe("test Gold methods", () => {
 
   it("test getGold(", () => {
     const gold = new Gold();
-    const allGold = gold.getGold(data);
+    const allGold = gold.getGold(139, 89.1);
     expect(allGold).toEqual({
-      highestPoint: 164.5,
-      highestPointDate: 20211130,
-      lowestPoint: 134,
-      lowestPointDate: 20211122,
-      middle: 149.25,
-      strong: 152.85,
-      superStrong: 158.67,
-      superWeak: 139.83,
-      weak: 145.65,
+      lowestPoint: 89.1,
+      highestPoint: 139,
+      superStrong: 129.47,
+      strong: 119.94,
+      middle: 114.05,
+      weak: 108.16,
+      superWeak: 98.63,
     });
   });
 });

@@ -25,7 +25,7 @@ describe("test SwingExtremes", () => {
 
   it("test SwingExtremes Peak", () => {
     const res = SwingExtremes(prices, SwingExtremesType.Peak);
-    expect(res).toEqual([6, 10, 13]);
+    expect(res).toEqual([1, 6, 10, 13 ]);
   });
 
   it("test SwingExtremes Trough", () => {

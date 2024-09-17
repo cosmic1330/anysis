@@ -1,7 +1,12 @@
 /* eslint @typescript-eslint/no-var-requires: "off" */
 const axios = require("axios");
-const { Williams } = require("../dist/cjs/index.js");
-const williams = new Williams();
+const {
+  Gold,
+  SwingExtremesType,
+  SwingExtremes,
+} = require("../dist/cjs/index.js");
+
+const gold = new Gold();
 function DemoDay(stockId) {
   axios
     .get(
@@ -11,14 +16,13 @@ function DemoDay(stockId) {
       res = res.data.replace(/^\(|\);$/g, "");
       let parse = JSON.parse(res);
       let data = parse.ta;
-      let williams9Data = williams.init(data[0], 9);
-      let williams18Data = williams.init(data[0], 18);
-      for (let i = 1; i < data.length; i++) {
-        williams9Data = williams.next(data[i], williams9Data, 9);
-        williams18Data = williams.next(data[i], williams18Data, 18);
-      }
-      console.log(williams9Data);
-      console.log(williams18Data);
+      const sortArray = [];
+      const hightPoints = SwingExtremes(data.map((data) => data.h), SwingExtremesType.Peak, 1);
+      const lowerPoints = SwingExtremes(data.map((data) => data.l), SwingExtremesType.Trough, 1);
+      console.log(hightPoints.map((item) => data[item]));
+      sortArray.push(...hightPoints);
+      sortArray.push(...lowerPoints);
+      sortArray.sort((a, b) => a - b);
     })
     .catch((error) => {
       console.error(error);

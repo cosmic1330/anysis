@@ -8,9 +8,9 @@ export { default as simpleRegressionModel } from "./analyze/Regression/simpleReg
 export { default as slope } from "./analyze/Slope/index.js";
 export {
   SwingExtremes,
+  SwingExtremesType,
   findPeaksByGradient,
   findTroughByGradient,
-  SwingExtremesType,
 } from "./analyze/SwingExtremes/index.js";
 export {
   exponentialSmoothing,
@@ -19,8 +19,10 @@ export {
 } from "./analyze/TimeSeries/R/index.js";
 export { calcSeasonalIndicesNoTrend } from "./analyze/TimeSeries/RS/index.js";
 export { default as Boll } from "./stockSkills/boll.js";
+export type { BollResType } from "./stockSkills/boll.js";
 export { default as Ema } from "./stockSkills/ema.js";
 export { default as Gold } from "./stockSkills/gold.js";
+export type { GetGoldResType } from "./stockSkills/gold.js";
 export { default as Kd } from "./stockSkills/kd.js";
 export { default as Ma } from "./stockSkills/ma.js";
 export { default as Macd } from "./stockSkills/macd.js";

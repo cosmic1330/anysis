@@ -1,9 +1,7 @@
-import getWeekLine from "./utils/getWeekLine.js";
 import type { ResType } from "./utils/getWeekLine";
+import getWeekLine from "./utils/getWeekLine.js";
 
-type ResGoldType = {
-  highestPointDate: number;
-  lowestPointDate: number;
+export type GetGoldResType = {
   lowestPoint: number;
   highestPoint: number;
   superStrong: number;
@@ -12,24 +10,24 @@ type ResGoldType = {
   weak: number;
   superWeak: number;
 };
-type ListType = { h: number; t: number; o: number; c: number; l: number }[];
-type ResHightestType = {
-  [key: string]: { h: number; t: number; o: number; c: number; l: number };
+type ListType = { h: number; t: number; o: number; c: number; l: number, [key: string]:unknown  }[];
+type FindHightestResType = {
+  [key: string]: { h: number; t: number; o: number; c: number; l: number, [key: string]:unknown };
 };
-type ResLowestType = {
-  [key: string]: { h: number; t: number; o: number; c: number; l: number };
+type FindLowestResType = {
+  [key: string]: { h: number; t: number; o: number; c: number; l: number, [key: string]:unknown };
 };
 
 interface GoldType {
-  findHighPoint: (list: ListType) => ResHightestType;
-  findLowPoint: (list: ListType) => ResLowestType;
-  getGold: (list: ListType) => ResGoldType;
+  findHighPoint: (list: ListType) => FindHightestResType;
+  findLowPoint: (list: ListType) => FindLowestResType;
+  getGold: (highestPoint: number, lowestPoint: number) => GetGoldResType;
 }
 
 export default class Gold implements GoldType {
-  findHighPoint(list: ListType): ResHightestType {
+  findHighPoint(list: ListType): FindHightestResType {
     const weekLine = getWeekLine(list, true);
-    const hightPoints: ResHightestType = {};
+    const hightPoints: FindHightestResType = {};
     for (let i = 0; i < weekLine.length; i++) {
       let hightPoint: ResType | undefined = undefined;
       switch (i) {
@@ -103,9 +101,9 @@ export default class Gold implements GoldType {
     return hightPoints;
   }
 
-  findLowPoint(list: ListType): ResLowestType {
+  findLowPoint(list: ListType): FindLowestResType {
     const weekLine = getWeekLine(list, true);
-    const lowPoints: ResLowestType = {};
+    const lowPoints: FindLowestResType = {};
     for (let i = 0; i < weekLine.length; i++) {
       let lowPoint: ResType | undefined = undefined;
       switch (i) {
@@ -179,23 +177,8 @@ export default class Gold implements GoldType {
     return lowPoints;
   }
 
-  getGold(list: ListType): ResGoldType {
-    const hightPoints = this.findHighPoint(list);
-    const lowPoints = this.findLowPoint(list);
-    const lastHightPointDate =
-      Object.keys(hightPoints).slice(-1)[0] !==
-      list[list.length - 1].t.toString()
-        ? Object.keys(hightPoints).slice(-1)[0]
-        : Object.keys(hightPoints).slice(-2)[0];
-    const lastLowPointDate =
-      Object.keys(lowPoints).slice(-1)[0] !== list[list.length - 1].t.toString()
-        ? Object.keys(lowPoints).slice(-1)[0]
-        : Object.keys(lowPoints).slice(-2)[0];
-    const highestPoint: number = hightPoints[lastHightPointDate].h;
-    const lowestPoint: number = lowPoints[lastLowPointDate].l;
-    const res: ResGoldType = {
-      highestPointDate: parseInt(lastHightPointDate),
-      lowestPointDate: parseInt(lastLowPointDate),
+  getGold(highestPoint: number, lowestPoint: number): GetGoldResType {
+    const res: GetGoldResType = {
       lowestPoint,
       highestPoint,
       superStrong:

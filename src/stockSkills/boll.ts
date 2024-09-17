@@ -1,7 +1,7 @@
 type ItemType = { c: number; [key: string]: unknown };
 type ListType = ItemType[];
-type ResBoll = {
-  c: number;
+export type BollResType = {
+  [key: string]: unknown;
   bollMa: number | null;
   bollUb: number | null;
   bollLb: number | null;
@@ -29,7 +29,7 @@ interface BollType {
     bollUb: number | null;
     bollLb: number | null;
   };
-  getBoll: (list: ListType, type: number) => ResBoll;
+  getBoll: (list: ListType, type: number) => BollResType;
 }
 
 export default class Boll implements BollType {
@@ -91,7 +91,7 @@ export default class Boll implements BollType {
     }
   }
 
-  getBoll(list: ListType, type: number): ResBoll {
+  getBoll(list: ListType, type: number): BollResType {
     const res = [];
 
     for (let i = 0; i < list.length; i++) {
