@@ -1,12 +1,12 @@
 /* eslint @typescript-eslint/no-var-requires: "off" */
 const axios = require("axios");
 const {
-  Gold,
-  SwingExtremesType,
-  SwingExtremes,
+  Rsi,
 } = require("../dist/cjs/index.js");
 
-const gold = new Gold();
+
+// 使用示例
+const rsi = new Rsi();
 function DemoDay(stockId) {
   axios
     .get(
@@ -16,13 +16,13 @@ function DemoDay(stockId) {
       res = res.data.replace(/^\(|\);$/g, "");
       let parse = JSON.parse(res);
       let data = parse.ta;
-      const sortArray = [];
-      const hightPoints = SwingExtremes(data.map((data) => data.h), SwingExtremesType.Peak, 1);
-      const lowerPoints = SwingExtremes(data.map((data) => data.l), SwingExtremesType.Trough, 1);
-      console.log(hightPoints.map((item) => data[item]));
-      sortArray.push(...hightPoints);
-      sortArray.push(...lowerPoints);
-      sortArray.sort((a, b) => a - b);
+      const rsis = rsi.calculateRSI(data, 5);
+      let rsi5Data = rsi.init(data[0],5);
+      for (let i = 1; i < data.length; i++) {
+        rsi5Data = rsi.next(data[i], rsi5Data, 5);
+      }
+      console.log("rsi", rsis[rsis.length - 2]);
+      console.log("rsi", rsi5Data);
     })
     .catch((error) => {
       console.error(error);
@@ -32,4 +32,4 @@ function DemoDay(stockId) {
     });
 }
 
-DemoDay("2449");
+DemoDay("2385");

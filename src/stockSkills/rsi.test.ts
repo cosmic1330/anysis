@@ -2,29 +2,18 @@ import Rsi from "./rsi";
 import data from "./test_data.test";
 
 describe("test rsi methods", () => {
-  it("test getRsi6()", () => {
-    const rsi = new Rsi();
-    expect(rsi.getRsi6(data)[data.length - 1]).toEqual({
-      c: 142,
-      o: 138,
-      t: 20211214,
-      v: 16841,
-      h: 143,
-      l: 138,
-      rsi6: 45.12,
-    });
-  });
 
-  it("test getRsi12()", () => {
+  it("test init & next", () => {
     const rsi = new Rsi();
-    expect(rsi.getRsi12(data)[data.length - 1]).toEqual({
-      c: 142,
-      o: 138,
-      t: 20211214,
-      v: 16841,
-      h: 143,
-      l: 138,
-      rsi12: 49.47,
-    });
+    let result = rsi.init(data[0], 5);
+    for (let i = 1; i < data.length; i++) {
+      result = rsi.next(data[i], result, 5);
+    }
+    expect(result?.rsi).toEqual(44.72040034947733);
+  });
+  it("test calculateRSI()", () => {
+    const rsi = new Rsi();
+    const result = rsi.calculateRSI(data, 5);
+    expect(result?.[result?.length - 1]).toEqual(44.72040034947733);
   });
 });
