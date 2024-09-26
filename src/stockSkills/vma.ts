@@ -1,26 +1,17 @@
-type DataType = { v: number, [key:string]: unknown};
-type ListType = DataType[];
+import { StockListType, StockType } from "./types";
+
+export type VmaResType = { dataset: StockListType; vma: number; type: number };
+
 interface VmaType {
-  init: (
-    data: DataType,
-    type: number
-  ) => { dataset: ListType; vma: number; type: number };
-  next: (
-    data: DataType,
-    preList: { dataset: ListType; vma: number; type: number },
-    type: number
-  ) => { dataset: ListType; vma: number; type: number };
+  init: (data: StockType, type: number) => VmaResType;
+  next: (data: StockType, preList: VmaResType, type: number) => VmaResType;
 }
 
 export default class Vma implements VmaType {
-  init(data: DataType, type: number) {
+  init(data: StockType, type: number) {
     return { dataset: [data], vma: 0, type };
   }
-  next(
-    data: DataType,
-    preList: { dataset: ListType; vma: number; type: number },
-    type: number
-  ) {
+  next(data: StockType, preList: VmaResType, type: number) {
     preList.dataset.push(data);
     if (preList.dataset.length < type) {
       return { dataset: preList.dataset, vma: 0, type };

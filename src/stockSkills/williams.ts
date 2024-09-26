@@ -1,5 +1,5 @@
-type DataType = { h: number; l: number; c: number };
-type ListType = DataType[];
+import { StockListType, StockType } from "./types";
+
 type ResWilliams9Type = { c: number; williams9: number | null }[];
 type ResWilliams18Type = { c: number; williams18: number | null }[];
 type ResAllWilliamsType = {
@@ -8,41 +8,32 @@ type ResAllWilliamsType = {
   williams9: number | null;
 }[];
 
+export type WilliamsResType = {
+  dataset: StockListType;
+  williams: number;
+  type: number;
+};
+
 interface WilliamsType {
-  init: (
-    data: DataType,
-    type: number
-  ) => {
-    dataset: ListType;
-    williams: number;
-    type: number;
-  };
+  init: (data: StockType, type: number) => WilliamsResType;
   next: (
-    data: DataType,
+    data: StockType,
     preList: {
-      dataset: ListType;
+      dataset: StockListType;
       williams: number;
       type: number;
     },
     type: number
-  ) => {
-    dataset: ListType;
-    williams: number;
-    type: number;
-  };
-  getWilliams9: (list: ListType) => ResWilliams9Type;
-  getWilliams18: (list: ListType) => ResWilliams18Type;
-  getAllWillams(list: ListType): ResAllWilliamsType;
+  ) => WilliamsResType;
+  getWilliams9: (list: StockListType) => ResWilliams9Type;
+  getWilliams18: (list: StockListType) => ResWilliams18Type;
+  getAllWillams(list: StockListType): ResAllWilliamsType;
 }
 export default class Williams implements WilliamsType {
-  init(data: DataType, type: number) {
+  init(data: StockType, type: number) {
     return { dataset: [data], williams: 0, type };
   }
-  next(
-    data: DataType,
-    preList: { dataset: ListType; williams: number; type: number },
-    type: number
-  ) {
+  next(data: StockType, preList: WilliamsResType, type: number) {
     preList.dataset.push(data);
     if (preList.dataset.length < type) {
       return {
@@ -66,7 +57,7 @@ export default class Williams implements WilliamsType {
     }
   }
 
-  getAllWillams(list: ListType): ResAllWilliamsType {
+  getAllWillams(list: StockListType): ResAllWilliamsType {
     const res = [];
     const williams9 = this.getWilliams9(list);
     const williams18 = this.getWilliams18(list);
@@ -76,7 +67,7 @@ export default class Williams implements WilliamsType {
     return res;
   }
 
-  getWilliams9(list: ListType): ResWilliams9Type {
+  getWilliams9(list: StockListType): ResWilliams9Type {
     const res = [];
     for (let i = 0; i < list.length; i++) {
       if (i < 9) res[i] = { ...list[i], williams9: null };
@@ -93,7 +84,7 @@ export default class Williams implements WilliamsType {
     return res;
   }
 
-  getWilliams18(list: ListType): ResWilliams18Type {
+  getWilliams18(list: StockListType): ResWilliams18Type {
     const res = [];
     for (let i = 0; i < list.length; i++) {
       if (i < 18) res[i] = { ...list[i], williams18: null };

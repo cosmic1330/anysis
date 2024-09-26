@@ -11,6 +11,7 @@ describe("test getWeekLine methods", () => {
       l: 137,
       o: 155,
       t: 20211210,
+      v: 78444,
     });
   });
 });

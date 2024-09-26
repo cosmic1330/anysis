@@ -1,71 +1,48 @@
-type ItemType = { c: number; [key: string]: unknown };
-type ListType = ItemType[];
-export type BollResType = {
-  [key: string]: unknown;
-  bollMa: number | null;
-  bollUb: number | null;
-  bollLb: number | null;
-}[];
+import { StockListType, StockType } from "./types";
 
-interface BollType {
-  init: (data: ItemType) => {
-    dataset: ListType;
-    bollMa: number | null;
-    bollUb: number | null;
-    bollLb: number | null;
-  };
+
+export type BollResType = {
+  dataset: StockListType;
+  bollMa: number;
+  bollUb: number;
+  bollLb: number;
+};
+
+interface BollClassType {
+  init: (data: StockType) => BollResType;
   next: (
-    data: ItemType,
-    preList: {
-      dataset: ListType;
-      bollMa: number | null;
-      bollUb: number | null;
-      bollLb: number | null;
-    },
+    data: StockType,
+    preList: BollResType,
     type: number
-  ) => {
-    dataset: ListType;
-    bollMa: number | null;
-    bollUb: number | null;
-    bollLb: number | null;
-  };
-  getBoll: (list: ListType, type: number) => BollResType;
+  ) => BollResType;
+  getBoll: (list: StockListType, type: number) => {
+  [key: string]: unknown;
+  bollMa: number;
+  bollUb: number;
+  bollLb: number;
+}[];
 }
 
-export default class Boll implements BollType {
-  init(data: ItemType): {
-    dataset: ListType;
-    bollMa: number | null;
-    bollUb: number | null;
-    bollLb: number | null;
-  } {
+export default class Boll implements BollClassType {
+  init(data: StockType): BollResType {
     return {
       dataset: [data],
-      bollMa: null,
-      bollUb: null,
-      bollLb: null,
+      bollMa: 0,
+      bollUb: 0,
+      bollLb: 0,
     };
   }
 
-  next(
-    data: ItemType,
-    preList: {
-      dataset: ListType;
-      bollMa: number | null;
-      bollUb: number | null;
-      bollLb: number | null;
-    },
-    type: number
-  ) {
+  next(data: StockType, preList: BollResType, type: number) {
     preList.dataset.push(data);
 
     if (preList.dataset.length < type) {
       return {
         dataset: preList.dataset,
         type,
-        bollMa: null,
-        bollUb: null,
-        bollLb: null,
+        bollMa: 0,
+        bollUb: 0,
+        bollLb: 0,
       };
     } else {
       if (preList.dataset.length > type) {
@@ -77,7 +54,7 @@ export default class Boll implements BollType {
       );
       const bollMa: number = Math.round((sum / type) * 100) / 100;
       const difference = preList.dataset.reduce((pre, current) => {
-        return bollMa !== null ? pre + Math.pow(current.c - bollMa, 2) : pre;
+        return bollMa !== 0 ? pre + Math.pow(current.c - bollMa, 2) : pre;
       }, 0);
       const std: number = Math.round(Math.sqrt(difference / type) * 100) / 100;
 
@@ -91,16 +68,21 @@ export default class Boll implements BollType {
     }
   }
 
-  getBoll(list: ListType, type: number): BollResType {
+  getBoll(list: StockListType, type: number): {
+  [key: string]: unknown;
+  bollMa: number;
+  bollUb: number;
+  bollLb: number;
+}[] {
     const res = [];
 
     for (let i = 0; i < list.length; i++) {
       if (i < type)
         res[i] = {
           ...list[i],
-          bollMa: null,
-          bollUb: null,
-          bollLb: null,
+          bollMa: 0,
+          bollUb: 0,
+          bollLb: 0,
         };
       else {
         // bollMa
@@ -112,9 +94,7 @@ export default class Boll implements BollType {
         const difference: number = res
           .slice(i - (type - 1), i + 1)
           .reduce((pre, current) => {
-            return bollMa !== null
-              ? pre + Math.pow(current.c - bollMa, 2)
-              : pre;
+            return bollMa !== 0 ? pre + Math.pow(current.c - bollMa, 2) : pre;
           }, 0);
         const std: number =
           Math.round(Math.sqrt(difference / type) * 100) / 100;

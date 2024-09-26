@@ -1,53 +1,21 @@
-type ItemType = { c: number; [key: string]: unknown };
-type ListType = ItemType[];
-interface EmaType {
-  init: (
-    data: ItemType,
-    type: number
-  ) => {
-    dataset: ListType;
-    ema: number;
-    type: number;
-  };
-  next: (
-    data: ItemType,
-    preList: {
-      dataset: ListType;
-      ema: number;
-      type: number;
-    },
-    type: number
-  ) => {
-    dataset: ListType;
-    ema: number;
-    type: number;
-  };
+import { StockListType, StockType } from "./types";
+
+export type EmaResType = {
+  dataset: StockListType;
+  ema: number;
+  type: number;
+};
+interface EmaClassType {
+  init: (data: StockType, type: number) => EmaResType;
+  next: (data: StockType, preList: EmaResType, type: number) => EmaResType;
   getStartEma: (list: number[], period: number) => number;
   getEma: (list: number[], period: number) => (number | null)[];
 }
-export default class Ema implements EmaType {
-  init(
-    data: ItemType,
-    type: number
-  ): {
-    dataset: ListType;
-    ema: number;
-    type: number;
-  } {
+export default class Ema implements EmaClassType {
+  init(data: StockType, type: number): EmaResType {
     return { dataset: [data], ema: 0, type };
   }
-  next(
-    data: ItemType,
-    preList: {
-      dataset: ListType;
-      ema: number;
-    },
-    type: number
-  ): {
-    dataset: ListType;
-    ema: number;
-    type: number;
-  } {
+  next(data: StockType, preList: EmaResType, type: number): EmaResType {
     preList.dataset.push(data);
     if (preList.dataset.length < type) {
       return {

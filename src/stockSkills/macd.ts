@@ -1,4 +1,5 @@
-type ItemType = { h: number; l: number; c: number };
+import { StockListType, StockType } from "./types";
+
 type ResEMA12Type = { h: number; l: number; c: number; EMA12: number | null }[];
 type ResEMA26Type = { h: number; l: number; c: number; EMA26: number | null }[];
 type ResDifType = { h: number; l: number; c: number; DIF: number | null }[];
@@ -20,79 +21,47 @@ type ResAllMacdType = {
   OSC: number | null;
 }[];
 
+export type MacdResType = {
+  dataset: StockListType;
+  ema12: number;
+  ema26: number;
+  dif: number[];
+  macd: number;
+  osc: number;
+};
+
 interface MacdType {
-  init: (data: ItemType) => {
-    dataset: ItemType[];
-    ema12: number | null;
-    ema26: number | null;
-    dif: number[];
-    macd: number | null;
-    osc: number | null;
-  };
-  next: (
-    data: ItemType,
-    preList: {
-      dataset: ItemType[];
-      ema12: number | null;
-      ema26: number | null;
-      dif: number[];
-      macd: number | null;
-      osc: number | null;
-    }
-  ) => {
-    dataset: ItemType[];
-    ema12: number | null;
-    ema26: number | null;
-    dif: number[];
-    macd: number | null;
-    osc: number | null;
-  };
-  getMACD: (list: ItemType[]) => ResAllMacdType;
-  getDI: (item: ItemType) => number;
-  getStartEMA: (list: ItemType[]) => number;
-  getEMA12: (list: ItemType[]) => ResEMA12Type;
-  getEMA26: (list: ItemType[]) => ResEMA26Type;
+  init: (data: StockType) => MacdResType;
+  next: (data: StockType, preList: MacdResType) => MacdResType;
+  getMACD: (list: StockType[]) => ResAllMacdType;
+  getDI: (item: StockType) => number;
+  getStartEMA: (list: StockType[]) => number;
+  getEMA12: (list: StockType[]) => ResEMA12Type;
+  getEMA26: (list: StockType[]) => ResEMA26Type;
   getDIF: (
-    list: ItemType[],
+    list: StockType[],
     ResEMA12: ResEMA12Type,
     ResEMA26: ResEMA26Type
   ) => ResDifType;
-  getMACD9: (list: ItemType[], DIF: ResDifType) => ResMacd9Type;
+  getMACD9: (list: StockType[], DIF: ResDifType) => ResMacd9Type;
 }
 export default class MACD implements MacdType {
-  init(data: ItemType): {
-    dataset: ItemType[];
-    ema12: number | null;
-    ema26: number | null;
-    dif: number[];
-    macd: number | null;
-    osc: number | null;
-  } {
+  init(data: StockType): MacdResType {
     return {
       dataset: [data],
-      ema12: null,
-      ema26: null,
+      ema12: 0,
+      ema26: 0,
       dif: [],
-      macd: null,
-      osc: null,
+      macd: 0,
+      osc: 0,
     };
   }
 
-  next(
-    data: ItemType,
-    preList: {
-      dataset: ItemType[];
-      ema12: number | null;
-      ema26: number | null;
-      dif: number[];
-      macd: number | null;
-      osc: number | null;
-    }
-  ) {
+  next(data: StockType, preList: MacdResType) {
     preList.dataset.push(data);
     if (preList.dataset.length > 34) preList.dataset.shift();
     // EMA12
-    let ema12 = null;
+    let ema12 = 0;
     if (preList.dataset.length === 12) {
       ema12 = this.getStartEMA(preList.dataset);
       ema12 = (ema12 * 11) / 13 + (this.getDI(data) * 2) / 13;
@@ -103,7 +72,7 @@ export default class MACD implements MacdType {
     }
 
     // EMA26
-    let ema26 = null;
+    let ema26 = 0;
     if (preList.dataset.length === 26) {
       ema26 = this.getStartEMA(preList.dataset);
       ema26 = (ema26 * 25) / 27 + (this.getDI(data) * 2) / 27;
@@ -114,36 +83,34 @@ export default class MACD implements MacdType {
     }
 
     // DIF
-    let dif = null;
+    let dif = 0;
     if (ema12 && ema26) {
       dif = ema12 - ema26;
       dif = Math.round(dif * 100) / 100;
       preList.dif?.push(dif);
-      if (preList.dif.length > 9) preList.dif?.shift();
     }
 
     // MACD & OSC
-    let macd = null;
-    let osc = null;
+    let macd = 0;
+    let osc = 0;
     if (preList.dif.length === 9) {
-      if (preList.macd === null) {
-        macd = preList.dif.reduce(
-          (accumulator, currentValue) => accumulator + currentValue
-        );
-        for (let i = 0; i < 9; i++) {
-          const item = preList.dif[i];
-          macd = macd + ((item - macd) * 2) / 10;
-          macd = Math.round(macd * 100) / 100;
-          osc = item - macd;
-          osc = Math.round(osc * 100) / 100;
-        }
-      } else {
-        macd = preList.macd + (((dif as number) - preList.macd) * 2) / 10;
+      macd = preList.dif.reduce(
+        (accumulator, currentValue) => accumulator + currentValue
+      );
+      for (let i = 0; i < 9; i++) {
+        const item = preList.dif[i];
+        macd = macd + ((item - macd) * 2) / 10;
         macd = Math.round(macd * 100) / 100;
-        const item = preList.dif[preList.dif.length - 1];
         osc = item - macd;
         osc = Math.round(osc * 100) / 100;
       }
+    } else if (preList.dif.length > 9) {
+      macd = preList.macd + (((dif as number) - preList.macd) * 2) / 10;
+      macd = Math.round(macd * 100) / 100;
+      const item = preList.dif[preList.dif.length - 1];
+      osc = item - macd;
+      osc = Math.round(osc * 100) / 100;
+      preList.dif?.shift();
     }
 
     return {
@@ -156,7 +123,7 @@ export default class MACD implements MacdType {
     };
   }
 
-  getMACD(list: ItemType[]): ResAllMacdType {
+  getMACD(list: StockType[]): ResAllMacdType {
     // 首筆RSI
     const res = [];
     const EMA12 = this.getEMA12(list);
@@ -168,20 +135,20 @@ export default class MACD implements MacdType {
     }
     return res;
   }
-  getDI(item: ItemType): number {
+  getDI(item: StockType): number {
     return (item["h"] + item["l"] + 2 * item["c"]) / 4;
   }
 
-  getStartEMA(arr: ItemType[]): number {
+  getStartEMA(arr: StockType[]): number {
     let sum = 0;
-    arr.forEach((item: ItemType) => {
+    arr.forEach((item: StockType) => {
       const DI = this.getDI(item);
       sum += DI;
     });
     return sum / arr.length;
   }
 
-  getEMA12(list: ItemType[]): ResEMA12Type {
+  getEMA12(list: StockType[]): ResEMA12Type {
     const start = list.slice(0, 11);
     let beforeEMA12 = this.getStartEMA(start);
     const res = [];
@@ -195,7 +162,7 @@ export default class MACD implements MacdType {
     return res;
   }
 
-  getEMA26(list: ItemType[]): ResEMA26Type {
+  getEMA26(list: StockType[]): ResEMA26Type {
     const start = list.slice(0, 25);
     let beforeEMA26 = this.getStartEMA(start);
     const res = [];
@@ -210,7 +177,7 @@ export default class MACD implements MacdType {
   }
 
   getDIF(
-    list: ItemType[],
+    list: StockType[],
     ResEMA12: ResEMA12Type,
     ResEMA26: ResEMA26Type
   ): ResDifType {
@@ -227,7 +194,7 @@ export default class MACD implements MacdType {
     return res;
   }
 
-  getMACD9(list: ItemType[], DIF: ResDifType): ResMacd9Type {
+  getMACD9(list: StockType[], DIF: ResDifType): ResMacd9Type {
     const res = [];
     let beforeMACD9 = 0;
     for (let i = 0; i < list.length; i++) {

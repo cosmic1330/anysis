@@ -1,56 +1,35 @@
-type ItemType = { h: number; l: number; c: number; v: number };
-type ResObv = { obv: number; } & ItemType;
+import { StockListType, StockType } from "./types";
+
+type ResObv = { obv: number } & StockType;
+
+export type ObvResType = {
+  dataset: StockListType;
+  obv: number;
+  obvList: number[];
+  preClose: number;
+  obvMa: number;
+  type: number;
+};
 
 interface ObvType {
-  init: (data: ItemType, type: number) => {
-    dataset: ItemType[];
-    obv: number;
-    obvList: number[];
-    preClose: number;
-    obvMa: number;
-  };
-  next: (
-    data: ItemType,
-    preList: {
-      dataset: ItemType[];
-      obv: number;
-      obvList: number[];
-      preClose: number;
-      obvMa: number;
-    },
-    type: number
-  ) => {
-    dataset: ItemType[];
-    obv: number;
-    obvList: number[];
-    preClose: number;
-    obvMa: number;
-  };
+  init: (data: StockType, type: number) => ObvResType;
+  next: (data: StockType, preList: ObvResType, type: number) => ObvResType;
 
-  getObv: (list: ItemType[], period: number) => ResObv[];
+  getObv: (list: StockType[], period: number) => ResObv[];
 }
 export default class Obv implements ObvType {
-  init(data: ItemType, type: number) {
+  init(data: StockType, type: number): ObvResType {
     return {
       dataset: [data],
       obv: data.v,
       obvList: [data.v],
       preClose: data.c,
       obvMa: 0,
+      type,
     };
   }
 
-  next(
-    data: ItemType,
-    preList: {
-      dataset: ItemType[];
-      obv: number;
-      obvList: number[];
-      preClose: number;
-      obvMa: number;
-    }, 
-    type: number
-  ) {
+  next(data: StockType, preList: ObvResType, type: number): ObvResType {
     const currentVolume = data.v;
     const currentClose = data.c;
     // obv
@@ -73,11 +52,12 @@ export default class Obv implements ObvType {
       obv,
       preClose: currentClose,
       obvList,
-      obvMa: vma
+      obvMa: vma,
+      type,
     };
   }
 
-  getObv(list: ItemType[]): ResObv[] {
+  getObv(list: StockType[]): ResObv[] {
     const res = [];
     let obv = 0;
 

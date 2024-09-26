@@ -1,35 +1,24 @@
-type ListType = { h: number; t: number; o: number; c: number; l: number }[];
+import { StockListType, StockType } from "../types";
+
 export type ResType = {
-  h: number;
-  t: number;
-  o: number;
-  c: number;
-  l: number;
-  detail?: ListType;
-};
+  detail?: StockListType;
+} & StockType;
 
 function addDetail(
-  obj: { h: number; t: number; o: number; c: number; l: number },
-  list: ListType,
+  obj: StockType,
+  list: StockListType,
   detail: boolean
-): {
-  h: number;
-  t: number;
-  o: number;
-  c: number;
-  l: number;
-  detail?: ListType;
-} {
+): ResType {
   if (detail) return { ...obj, detail: list };
   else return { ...obj };
 }
 
 export default function getWeekLine(
-  list: ListType,
+  list: StockListType,
   detail: boolean
 ): ResType[] {
   const res: ResType[] = [];
-  let collectWeekData: ListType = [];
+  let collectWeekData: StockListType = [];
   list.forEach((item, index) => {
     const year = item["t"]
       .toString()
@@ -46,6 +35,7 @@ export default function getWeekLine(
           t: collectWeekData[collectWeekData.length - 1]["t"],
           h: Math.max(...collectWeekData.map((item) => item.h)),
           l: Math.min(...collectWeekData.map((item) => item.l)),
+          v: collectWeekData.reduce((pre, current) => pre + current.v, 0),
         };
         res.push(addDetail(obj, collectWeekData, detail));
         collectWeekData = [];
@@ -59,6 +49,7 @@ export default function getWeekLine(
             t: collectWeekData[collectWeekData.length - 1]["t"],
             h: Math.max(...collectWeekData.map((item) => item.h)),
             l: Math.min(...collectWeekData.map((item) => item.l)),
+            v: collectWeekData.reduce((pre, current) => pre + current.v, 0),
           };
           res.push(addDetail(obj, collectWeekData, detail));
         }
@@ -74,6 +65,7 @@ export default function getWeekLine(
             t: collectWeekData[collectWeekData.length - 1]["t"],
             h: Math.max(...collectWeekData.map((item) => item.h)),
             l: Math.min(...collectWeekData.map((item) => item.l)),
+            v: collectWeekData.reduce((pre, current) => pre + current.v, 0),
           };
           res.push(addDetail(obj, collectWeekData, detail));
         }

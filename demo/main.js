@@ -2,11 +2,14 @@
 const axios = require("axios");
 const {
   Rsi,
+  Obv,
+  findPeaksByGradient,
+  findTroughByGradient,
 } = require("../dist/cjs/index.js");
-
 
 // 使用示例
 const rsi = new Rsi();
+const obv = new Obv();
 function DemoDay(stockId) {
   axios
     .get(
@@ -16,13 +19,19 @@ function DemoDay(stockId) {
       res = res.data.replace(/^\(|\);$/g, "");
       let parse = JSON.parse(res);
       let data = parse.ta;
-      const rsis = rsi.calculateRSI(data, 5);
-      let rsi5Data = rsi.init(data[0],5);
-      for (let i = 1; i < data.length; i++) {
-        rsi5Data = rsi.next(data[i], rsi5Data, 5);
-      }
-      console.log("rsi", rsis[rsis.length - 2]);
-      console.log("rsi", rsi5Data);
+      let obvData = obv.getObv(data);
+      obvData = obvData.map((item) => item.obv);
+      const peak = findPeaksByGradient(obvData, 1);
+      const peakIndex =peak[peak.length-1]
+      const peak2Index =peak[peak.length-2]
+      console.log(data[peakIndex].t, data[peakIndex].c);
+      console.log(data[peak2Index].t, data[peak2Index].c);
+
+      const trough = findTroughByGradient(obvData, 1);
+      const troughIndex =trough[trough.length-1]
+      const trough2Index =trough[trough.length-2]
+      console.log(data[troughIndex].t, data[troughIndex].c);
+      console.log(data[trough2Index].t, data[trough2Index].c);
     })
     .catch((error) => {
       console.error(error);

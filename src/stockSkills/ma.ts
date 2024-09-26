@@ -1,59 +1,48 @@
-type DataType = { c: number; [key: string]: unknown };
-type ListType = DataType[];
-type ResMa5 = { c: number; ma5: number | null }[];
-type ResMa10 = { c: number; ma10: number | null }[];
-type ResMa20 = { c: number; ma20: number | null }[];
-type ResMa60 = { c: number; ma60: number | null }[];
-type ResMa = { c: number; ma: number | null }[];
+import { StockListType, StockType } from "./types";
+export type MaResType = {
+  dataset: StockListType;
+  ma: number;
+  type: number;
+  exclusionValue: { "d+1": number; d: number; "d-1": number };
+};
+
+type ResMa5 = { c: number; ma5: number }[];
+type ResMa10 = { c: number; ma10: number }[];
+type ResMa20 = { c: number; ma20: number }[];
+type ResMa60 = { c: number; ma60: number }[];
+type ResMa = { c: number; ma: number }[];
 type ResAllMa = {
   c: number;
-  ma5: number | null;
-  ma10: number | null;
-  ma20: number | null;
-  ma25: number | null;
-  ma60: number | null;
+  ma5: number;
+  ma10: number;
+  ma20: number;
+  ma25: number;
+  ma60: number;
 }[];
 
 interface MaType {
-  init: (
-    data: DataType,
-    type: number
-  ) => {
-    dataset: ListType;
-    ma: number;
-    type: number;
-    exclusionValue: { "d+1": number; d: number; "d-1": number };
-  };
-  next: (
-    data: DataType,
-    preList: {
-      dataset: ListType;
-      ma: number;
-      type: number;
-      exclusionValue: { "d+1": number; d: number; "d-1": number };
-    },
-    type: number
-  ) => {
-    dataset: ListType;
-    ma: number;
-    type: number;
-    exclusionValue: { "d+1": number; d: number; "d-1": number };
-  };
-  getAllMa: (list: ListType) => ResAllMa;
-  getMa5: (list: ListType) => ResMa5;
-  getMa10: (list: ListType) => ResMa10;
-  getMa20: (list: ListType) => ResMa20;
-  getMa60: (list: ListType) => ResMa60;
-  getMa: (list: ListType, self: number) => ResMa;
+  init: (data: StockType, type: number) => MaResType;
+  next: (data: StockType, preList: MaResType, type: number) => MaResType;
+  getAllMa: (list: StockListType) => ResAllMa;
+  getMa5: (list: StockListType) => ResMa5;
+  getMa10: (list: StockListType) => ResMa10;
+  getMa20: (list: StockListType) => ResMa20;
+  getMa60: (list: StockListType) => ResMa60;
+  getMa: (list: StockListType, self: number) => ResMa;
 }
 
 export default class Ma implements MaType {
-  init(data: DataType, type: number) {
-    return { dataset: [data], ma: 0, type, exclusionValue: { "d+1":0, d: 0, "d-1": 0 } };
+  init(data: StockType, type: number) {
+    return {
+      dataset: [data],
+      ma: 0,
+      type,
+      exclusionValue: { "d+1": 0, d: 0, "d-1": 0 },
+    };
   }
   next(
-    data: DataType,
-    preList: { dataset: ListType; ma: number; type: number },
+    data: StockType,
+    preList: { dataset: StockListType; ma: number; type: number },
     type: number
   ) {
     preList.dataset.push(data);
@@ -62,10 +51,14 @@ export default class Ma implements MaType {
         dataset: preList.dataset,
         ma: 0,
         type,
-        exclusionValue: { "d+1":0, d: 0, "d-1": 0 },
+        exclusionValue: { "d+1": 0, d: 0, "d-1": 0 },
       };
     } else {
-      const exclusionValue = { "d+1":preList.dataset[1].c, d: preList.dataset[0].c, "d-1": 0 };
+      const exclusionValue = {
+        "d+1": preList.dataset[1].c,
+        d: preList.dataset[0].c,
+        "d-1": 0,
+      };
       if (preList.dataset.length > type) {
         exclusionValue["d-1"] = exclusionValue.d;
         preList.dataset.shift();
@@ -78,7 +71,7 @@ export default class Ma implements MaType {
       return { dataset: preList.dataset, ma, type, exclusionValue };
     }
   }
-  getAllMa(list: ListType): ResAllMa {
+  getAllMa(list: StockListType): ResAllMa {
     const res = [];
     const responseMa5 = this.getMa5(list);
     const responseMa10 = this.getMa10(list);
@@ -96,10 +89,10 @@ export default class Ma implements MaType {
     return res;
   }
 
-  getMa5(list: ListType): ResMa5 {
+  getMa5(list: StockListType): ResMa5 {
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < 4) res[i] = { ...list[i], ma5: null };
+      if (i < 4) res[i] = { ...list[i], ma5: 0 };
       else {
         const sum = list
           .slice(i - 4, i + 1)
@@ -111,10 +104,10 @@ export default class Ma implements MaType {
     return res;
   }
 
-  getMa10(list: ListType): ResMa10 {
+  getMa10(list: StockListType): ResMa10 {
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < 9) res[i] = { ...list[i], ma10: null };
+      if (i < 9) res[i] = { ...list[i], ma10: 0 };
       else {
         const sum = list
           .slice(i - 9, i + 1)
@@ -126,10 +119,10 @@ export default class Ma implements MaType {
     return res;
   }
 
-  getMa20(list: ListType): ResMa20 {
+  getMa20(list: StockListType): ResMa20 {
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < 19) res[i] = { ...list[i], ma20: null };
+      if (i < 19) res[i] = { ...list[i], ma20: 0 };
       else {
         const sum = list
           .slice(i - 19, i + 1)
@@ -141,10 +134,10 @@ export default class Ma implements MaType {
     return res;
   }
 
-  getMa60(list: ListType): ResMa60 {
+  getMa60(list: StockListType): ResMa60 {
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < 59) res[i] = { ...list[i], ma60: null };
+      if (i < 59) res[i] = { ...list[i], ma60: 0 };
       else {
         const sum = list
           .slice(i - 59, i + 1)
@@ -156,10 +149,10 @@ export default class Ma implements MaType {
     return res;
   }
 
-  getMa(list: ListType, self: number): ResMa {
+  getMa(list: StockListType, self: number): ResMa {
     const res = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < self - 1) res[i] = { ...list[i], ma: null };
+      if (i < self - 1) res[i] = { ...list[i], ma: 0 };
       else {
         const sum = list
           .slice(i - (self - 1), i + 1)

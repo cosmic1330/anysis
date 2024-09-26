@@ -1,54 +1,52 @@
-interface KdType {
-  getRSV: (list: ListType) => ResRSV;
-  getKD: (list: ListType) => ResKD;
-}
-type DataType = { c: number; h: number; l: number };
-type ListType = DataType[];
-type ResRSV = { c: number; rsv: number | null }[];
+import { StockListType, StockType } from "./types";
+
+type ResRSV = { c: number; rsv: number; [key: string]: unknown };
 type ResKD = {
   c: number;
-  rsv: number | null;
-  k: number | null;
-  d: number | null;
-  "k-d": number | null;
-}[];
-export default class Kd implements KdType {
-  init(data: DataType): {
-    dataset: ListType;
-    rsv: number | null;
-    k: number | null;
-    d: number | null;
-    "k-d": number | null;
-  } {
+  rsv: number;
+  k: number;
+  d: number;
+  "k-d": number;
+  [key: string]: unknown;
+};
+
+export type KdResType = {
+  dataset: StockListType;
+  rsv: number;
+  k: number;
+  d: number;
+  "k-d": number;
+  type: number;
+};
+interface KdClassType {
+  init: (data: StockType, type: number) => KdResType;
+  next: (data: StockType, preList: KdResType, type: number) => KdResType;
+  getRSV: (list: StockListType) => ResRSV[];
+  getKD: (list: StockListType) => ResKD[];
+}
+export default class Kd implements KdClassType {
+  init(data: StockType, type: number): KdResType {
     return {
       dataset: [data],
-      rsv: null,
-      k: null,
-      d: null,
-      "k-d": null,
+      rsv: 0,
+      k: 0,
+      d: 0,
+      "k-d": 0,
+      type,
     };
   }
 
-  next(
-    data: DataType,
-    preList: {
-      dataset: ListType;
-      rsv: number | null;
-      k: number | null;
-      d: number | null;
-      "k-d": number | null;
-    },
-    type: number
-  ) {
+  next(data: StockType, preList: KdResType, type: number): KdResType {
     preList.dataset.push(data);
 
     if (preList.dataset.length < type) {
       return {
         dataset: preList.dataset,
-        rsv: null,
-        k: null,
-        d: null,
-        "k-d": null,
+        rsv: 0,
+        k: 0,
+        d: 0,
+        "k-d": 0,
+        type,
       };
     } else {
       if (preList.dataset.length > type) {
@@ -71,14 +69,15 @@ export default class Kd implements KdType {
         k,
         d,
         "k-d": k_d,
+        type,
       };
     }
   }
 
-  getRSV(list: ListType) {
-    const res = [];
+  getRSV(list: StockListType): ResRSV[] {
+    const res: ResRSV[] = [];
     for (let i = 0; i < list.length; i++) {
-      if (i < 8) res[i] = { ...list[i], rsv: null };
+      if (i < 8) res[i] = { ...list[i], rsv: 0 };
       else {
         const low = Math.min(...list.slice(i - 8, i + 1).map((item) => item.l));
         const hight = Math.max(
@@ -93,7 +92,7 @@ export default class Kd implements KdType {
     return res;
   }
 
-  getKD(list: ListType) {
+  getKD(list: StockListType): ResKD[] {
     const res = [];
     let yesterdayK = 50;
     let yesterdayD = 50;
@@ -101,10 +100,10 @@ export default class Kd implements KdType {
       if (i < 8)
         res[i] = {
           ...list[i],
-          rsv: null,
-          k: null,
-          d: null,
-          "k-d": null,
+          rsv: 0,
+          k: 0,
+          d: 0,
+          "k-d": 0,
         };
       else {
         const low = Math.min(...list.slice(i - 8, i + 1).map((item) => item.l));

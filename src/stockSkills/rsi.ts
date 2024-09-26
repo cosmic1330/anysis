@@ -1,8 +1,14 @@
-type DataType = { c: number; [key: string]: unknown };
-type ListType = DataType[];
+import { StockListType, StockType } from "./types";
+export type RsiResType = {
+  dataset: StockListType;
+  rsi: number;
+  type: number;
+  avgGain: number;
+  avgLoss: number;
+};
 
 export default class Rsi {
-  init(data: DataType, type: number) {
+  init(data: StockType, type: number): RsiResType {
     return {
       dataset: [data],
       rsi: 0,
@@ -12,17 +18,7 @@ export default class Rsi {
     };
   }
 
-  next(
-    data: DataType,
-    preList: {
-      dataset: ListType;
-      rsi: number;
-      type: number;
-      avgGain: number;
-      avgLoss: number;
-    },
-    type: number
-  ) {
+  next(data: StockType, preList: RsiResType, type: number): RsiResType {
     preList.dataset.push(data);
     if (preList.dataset.length < type + 1) {
       return {
@@ -70,7 +66,7 @@ export default class Rsi {
     }
   }
 
-  calculateRSI(prices: ListType, period = 5) {
+  calculateRSI(prices: StockListType, period = 5) {
     if (prices.length < period + 1) {
       return [];
     }
