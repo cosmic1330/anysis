@@ -6,7 +6,7 @@ describe("test kd methods", () => {
     const index = data.length - 1;
     const kd = new Kd();
     const realData = kd.getKD(data)[index];
-    const init = kd.init(data[0]);
+    const init = kd.init(data[0], 9);
     let res = init;
     for (let i = 1; i <= index; i++) {
       const item = data[i];

@@ -1,14 +1,12 @@
 /* eslint @typescript-eslint/no-var-requires: "off" */
 const axios = require("axios");
 const {
-  Rsi,
   Obv,
   findPeaksByGradient,
   findTroughByGradient,
 } = require("../dist/cjs/index.js");
 
 // 使用示例
-const rsi = new Rsi();
 const obv = new Obv();
 function DemoDay(stockId) {
   axios
