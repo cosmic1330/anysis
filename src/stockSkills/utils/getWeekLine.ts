@@ -1,12 +1,16 @@
-import { StockListType, StockType } from "../types";
+import { StockType } from "../types";
+
+type NewStockType = Required<Pick<StockType, 'v'>> & StockType;
+
+type NewStockListType = NewStockType[];
 
 export type ResType = {
-  detail?: StockListType;
-} & StockType;
+  detail?: NewStockListType;
+} & NewStockType;
 
 function addDetail(
-  obj: StockType,
-  list: StockListType,
+  obj: NewStockType,
+  list: NewStockListType,
   detail: boolean
 ): ResType {
   if (detail) return { ...obj, detail: list };
@@ -14,11 +18,11 @@ function addDetail(
 }
 
 export default function getWeekLine(
-  list: StockListType,
+  list: NewStockListType,
   detail: boolean
 ): ResType[] {
   const res: ResType[] = [];
-  let collectWeekData: StockListType = [];
+  let collectWeekData: NewStockListType = [];
   list.forEach((item, index) => {
     const year = item["t"]
       .toString()

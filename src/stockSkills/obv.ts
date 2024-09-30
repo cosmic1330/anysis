@@ -1,6 +1,10 @@
 import { StockListType, StockType } from "./types";
 
-type ResObv = { obv: number } & StockType;
+type NewStockType = Required<Pick<StockType, 'v'>> & StockType;
+
+type NewStockListType = NewStockType[];
+
+type ResObv = { obv: number } & NewStockType;
 
 export type ObvResType = {
   dataset: StockListType;
@@ -12,13 +16,13 @@ export type ObvResType = {
 };
 
 interface ObvType {
-  init: (data: StockType, type: number) => ObvResType;
-  next: (data: StockType, preList: ObvResType, type: number) => ObvResType;
+  init: (data: NewStockType, type: number) => ObvResType;
+  next: (data: NewStockType, preList: ObvResType, type: number) => ObvResType;
 
-  getObv: (list: StockType[], period: number) => ResObv[];
+  getObv: (list: NewStockListType, period: number) => ResObv[];
 }
 export default class Obv implements ObvType {
-  init(data: StockType, type: number): ObvResType {
+  init(data: NewStockType, type: number): ObvResType {
     return {
       dataset: [data],
       obv: data.v,
@@ -29,7 +33,7 @@ export default class Obv implements ObvType {
     };
   }
 
-  next(data: StockType, preList: ObvResType, type: number): ObvResType {
+  next(data: NewStockType, preList: ObvResType, type: number): ObvResType {
     const currentVolume = data.v;
     const currentClose = data.c;
     // obv
@@ -57,7 +61,7 @@ export default class Obv implements ObvType {
     };
   }
 
-  getObv(list: StockType[]): ResObv[] {
+  getObv(list: NewStockListType): ResObv[] {
     const res = [];
     let obv = 0;
 

@@ -1,6 +1,6 @@
 export type StockType = {
   c: number;
-  v: number;
+  v?: number;
   l: number;
   h: number;
   o: number;

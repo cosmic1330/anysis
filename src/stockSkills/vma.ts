@@ -1,17 +1,25 @@
-import { StockListType, StockType } from "./types";
+import { StockType } from "./types";
 
-export type VmaResType = { dataset: StockListType; vma: number; type: number };
+type NewStockType = Required<Pick<StockType, 'v'>> & StockType;
+
+type NewStockListType = NewStockType[];
+
+export type VmaResType = {
+  dataset: NewStockListType;
+  vma: number;
+  type: number;
+};
 
 interface VmaType {
-  init: (data: StockType, type: number) => VmaResType;
-  next: (data: StockType, preList: VmaResType, type: number) => VmaResType;
+  init: (data: NewStockType, type: number) => VmaResType;
+  next: (data: NewStockType, preList: VmaResType, type: number) => VmaResType;
 }
 
 export default class Vma implements VmaType {
-  init(data: StockType, type: number) {
+  init(data: NewStockType, type: number) {
     return { dataset: [data], vma: 0, type };
   }
-  next(data: StockType, preList: VmaResType, type: number) {
+  next(data: NewStockType, preList: VmaResType, type: number) {
     preList.dataset.push(data);
     if (preList.dataset.length < type) {
       return { dataset: preList.dataset, vma: 0, type };

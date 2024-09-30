@@ -1,13 +1,9 @@
 /* eslint @typescript-eslint/no-var-requires: "off" */
 const axios = require("axios");
-const {
-  Obv,
-  findPeaksByGradient,
-  findTroughByGradient,
-} = require("../dist/cjs/index.js");
+const { Week } = require("../dist/cjs/index.js");
 
 // 使用示例
-const obv = new Obv();
+const week = new Week();
 function DemoDay(stockId) {
   axios
     .get(
@@ -17,19 +13,14 @@ function DemoDay(stockId) {
       res = res.data.replace(/^\(|\);$/g, "");
       let parse = JSON.parse(res);
       let data = parse.ta;
-      let obvData = obv.getObv(data);
-      obvData = obvData.map((item) => item.obv);
-      const peak = findPeaksByGradient(obvData, 1);
-      const peakIndex =peak[peak.length-1]
-      const peak2Index =peak[peak.length-2]
-      console.log(data[peakIndex].t, data[peakIndex].c);
-      console.log(data[peak2Index].t, data[peak2Index].c);
+      let weekData = week.init(data[0]);
 
-      const trough = findTroughByGradient(obvData, 1);
-      const troughIndex =trough[trough.length-1]
-      const trough2Index =trough[trough.length-2]
-      console.log(data[troughIndex].t, data[troughIndex].c);
-      console.log(data[trough2Index].t, data[trough2Index].c);
+      for (let i = 1; i < data.length; i++) {
+        weekData = week.next(data[i], weekData);
+      }
+
+      console.log(weekData.week[weekData.week.length - 1]);
+      console.log(weekData.week[weekData.week.length - 2]);
     })
     .catch((error) => {
       console.error(error);

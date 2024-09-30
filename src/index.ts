@@ -29,7 +29,7 @@ export { default as Macd } from "./stockSkills/macd.js";
 export { default as Obv } from "./stockSkills/obv.js";
 export { default as Rsi } from "./stockSkills/rsi.js";
 export { default as dateFormat } from "./stockSkills/utils/dateFormat.js";
-export { default as getWeekLine } from "./stockSkills/utils/getWeekLine.js";
+export { default as Week } from "./stockSkills/week.js";
 export { default as Vma } from "./stockSkills/vma.js";
 export { default as Williams } from "./stockSkills/williams.js";
 export { add } from "./test/add.js";

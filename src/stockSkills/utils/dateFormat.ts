@@ -7,9 +7,13 @@ export enum Mode {
   StringToNumber = 6, // ex:2021-08-01 --> 20210801
 }
 
-function dateFormat(date: number, mode: Mode): number;
-function dateFormat(date: number, mode: Mode): string;
-function dateFormat(date: string, mode: Mode): number;
+// 函数重载签名
+function dateFormat(date: number, mode: Mode.NumberToString): string;
+function dateFormat(date: number, mode: Mode.NumberToTimeStamp): number;
+function dateFormat(date: string, mode: Mode.StringToTimeStamp): number;
+function dateFormat(date: number, mode: Mode.TimeStampToString): string;
+function dateFormat(date: number, mode: Mode.TimeStampToNumber): number;
+function dateFormat(date: string, mode: Mode.StringToNumber): number;
 
 function dateFormat(date: number | string, mode: Mode): number | string {
   switch (mode) {
@@ -55,11 +59,12 @@ function dateFormat(date: number | string, mode: Mode): number | string {
       return parseInt(res);
     }
     case Mode.StringToNumber: {
-      const res = date.toString().replace("-", "").replace("-", "");
+      const res = (date as string).replace(/-/g, '');
       return parseInt(res);
     }
     default:
-      return "please setting mode";
+      throw new Error("请设置正确的模式");
   }
 }
+
 export default dateFormat;

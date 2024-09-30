@@ -1,7 +1,9 @@
 import type { ResType } from "./utils/getWeekLine";
 import getWeekLine from "./utils/getWeekLine.js";
-import { StockListType } from "./types";
 import { StockType } from "./types";
+
+type NewStockType = Required<Pick<StockType, 'v'>> & StockType;
+type NewStockListType = NewStockType[];
 
 export type GetGoldResType = {
   lowestPoint: number;
@@ -13,20 +15,20 @@ export type GetGoldResType = {
   superWeak: number;
 };
 export type FindHightestResType = {
-  [key: string]: StockType;
+  [key: string]: NewStockType;
 };
 export type FindLowestResType = {
-  [key: string]: StockType;
+  [key: string]: NewStockType;
 };
 
 interface GoldClassType {
-  findHighPoint: (list: StockListType) => FindHightestResType;
-  findLowPoint: (list: StockListType) => FindLowestResType;
+  findHighPoint: (list: NewStockListType) => FindHightestResType;
+  findLowPoint: (list: NewStockListType) => FindLowestResType;
   getGold: (highestPoint: number, lowestPoint: number) => GetGoldResType;
 }
 
 export default class Gold implements GoldClassType {
-  findHighPoint(list: StockListType): FindHightestResType {
+  findHighPoint(list: NewStockListType): FindHightestResType {
     const weekLine = getWeekLine(list, true);
     const hightPoints: FindHightestResType = {};
     for (let i = 0; i < weekLine.length; i++) {
@@ -102,7 +104,7 @@ export default class Gold implements GoldClassType {
     return hightPoints;
   }
 
-  findLowPoint(list: StockListType): FindLowestResType {
+  findLowPoint(list: NewStockListType): FindLowestResType {
     const weekLine = getWeekLine(list, true);
     const lowPoints: FindLowestResType = {};
     for (let i = 0; i < weekLine.length; i++) {
