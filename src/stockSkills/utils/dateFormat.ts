@@ -7,32 +7,51 @@ export enum Mode {
   StringToNumber = 6, // ex:2021-08-01 --> 20210801
 }
 
-// 函数重载签名
-function dateFormat(date: number, mode: Mode.NumberToString): string;
-function dateFormat(date: number, mode: Mode.NumberToTimeStamp): number;
-function dateFormat(date: string, mode: Mode.StringToTimeStamp): number;
-function dateFormat(date: number, mode: Mode.TimeStampToString): string;
-function dateFormat(date: number, mode: Mode.TimeStampToNumber): number;
-function dateFormat(date: string, mode: Mode.StringToNumber): number;
+type DateFormatInput<M extends Mode> = M extends
+  | Mode.NumberToString
+  | Mode.NumberToTimeStamp
+  | Mode.TimeStampToString
+  | Mode.TimeStampToNumber
+  ? number
+  : M extends Mode.StringToTimeStamp | Mode.StringToNumber
+  ? string
+  : never;
 
-function dateFormat(date: number | string, mode: Mode): number | string {
+type DateFormatOutput<M extends Mode> = M extends
+  | Mode.NumberToString
+  | Mode.TimeStampToString
+  ? string
+  : M extends
+      | Mode.NumberToTimeStamp
+      | Mode.StringToTimeStamp
+      | Mode.TimeStampToNumber
+      | Mode.StringToNumber
+  ? number
+  : never;
+
+function dateFormat<M extends Mode>(
+  date: DateFormatInput<M>,
+  mode: M
+): DateFormatOutput<M> {
   switch (mode) {
     case Mode.NumberToString: {
-      const input = date.toString();
-      const res =
-        input.slice(0, 4) + "-" + input.slice(4, 6) + "-" + input.slice(6, 8);
-      return res;
+      const input = String(date).padStart(8, "0");
+      return `${input.slice(0, 4)}-${input.slice(4, 6)}-${input.slice(
+        6,
+        8
+      )}` as DateFormatOutput<M>;
     }
     case Mode.NumberToTimeStamp: {
-      const input = date.toString();
-      const stringDate =
-        input.slice(0, 4) + "-" + input.slice(4, 6) + "-" + input.slice(6, 8);
-      const res = Date.parse(stringDate);
-      return res;
+      const input = String(date).padStart(8, "0");
+      const stringDate = `${input.slice(0, 4)}-${input.slice(
+        4,
+        6
+      )}-${input.slice(6, 8)}`;
+      return new Date(stringDate).getTime() as DateFormatOutput<M>;
     }
     case Mode.StringToTimeStamp: {
       const res = Date.parse(date as string);
-      return res;
+      return res as DateFormatOutput<M>;
     }
     case Mode.TimeStampToString: {
       const newDate = new Date(date);
@@ -44,23 +63,18 @@ function dateFormat(date: number | string, mode: Mode): number | string {
       const dd =
         newDate.getDate() < 10 ? "0" + newDate.getDate() : newDate.getDate();
       const res = yy + "-" + mm + "-" + dd;
-      return res;
+      return res as DateFormatOutput<M>;
     }
     case Mode.TimeStampToNumber: {
       const newDate = new Date(date);
       const yy = newDate.getFullYear();
-      const mm =
-        newDate.getMonth() + 1 < 10
-          ? "0" + (newDate.getMonth() + 1)
-          : newDate.getMonth() + 1;
-      const dd =
-        newDate.getDate() < 10 ? "0" + newDate.getDate() : newDate.getDate();
-      const res = `${yy}${mm}${dd}`;
-      return parseInt(res);
+      const mm = String(newDate.getMonth() + 1).padStart(2, "0");
+      const dd = String(newDate.getDate()).padStart(2, "0");
+      return parseInt(`${yy}${mm}${dd}`, 10) as DateFormatOutput<M>;
     }
     case Mode.StringToNumber: {
-      const res = (date as string).replace(/-/g, '');
-      return parseInt(res);
+      const res = (date as string).replace(/-/g, "");
+      return parseInt(res) as DateFormatOutput<M>;
     }
     default:
       throw new Error("请设置正确的模式");
