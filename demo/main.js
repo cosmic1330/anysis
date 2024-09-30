@@ -1,9 +1,10 @@
 /* eslint @typescript-eslint/no-var-requires: "off" */
 const axios = require("axios");
-const { Week } = require("../dist/cjs/index.js");
+const { Week, Kd } = require("../dist/cjs/index.js");
 
 // 使用示例
 const week = new Week();
+const kd = new Kd();
 function DemoDay(stockId) {
   axios
     .get(
@@ -19,8 +20,11 @@ function DemoDay(stockId) {
         weekData = week.next(data[i], weekData);
       }
 
-      console.log(weekData.week[weekData.week.length - 1]);
-      console.log(weekData.week[weekData.week.length - 2]);
+      let kdData = kd.init(weekData.week[0], 9);
+      for (let i = 0; i < weekData.week.length; i++) {
+        kdData = kd.next(weekData.week[i], kdData, 9);
+      }
+      console.log(kdData);
     })
     .catch((error) => {
       console.error(error);
