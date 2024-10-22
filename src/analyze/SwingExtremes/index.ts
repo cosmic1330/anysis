@@ -61,49 +61,23 @@ export function findTroughByGradient(prices: number[], level = 1): Index[] {
 
 export function SwingExtremes(
   y: number[],
-  type: SwingExtremesType,
   level = 1
-): Index[] {
-  if (type === SwingExtremesType.Peak) {
-    const result = [];
-    const indexs = findPeaksByGradient(y, level);
-    result.push(indexs[0]);
-    for (let i = 1; i < indexs.length; i++) {
-      if (
-        y[indexs[i]] > y[result[result.length - 1]] &&
-        y[indexs[i]] > y[result[result.length - 2]]
-      ) {
-        result[result.length - 1] = indexs[i];
-      } else if (
-        y[indexs[i + 1]] < y[i] &&
-        y[indexs[i]] > y[result[result.length - 1]]
-      ) {
-        result.pop();
-        result.push(indexs[i]);
-      } else result.push(indexs[i]);
-    }
-    return result;
-  }
-  if (type === SwingExtremesType.Trough) {
-    const result = [];
-    const indexs = findTroughByGradient(y, level);
-    result.push(indexs[0]);
-    for (let i = 1; i < indexs.length; i++) {
-      if (
-        y[indexs[i]] < y[result[result.length - 1]] &&
-        y[indexs[i]] < y[result[result.length - 2]]
-      ) {
-        result[result.length - 1] = indexs[i];
-      } else if (
-        y[indexs[i + 1]] > y[i] &&
-        y[indexs[i]] < y[result[result.length - 1]]
-      ) {
-        result.pop();
-        result.push(indexs[i]);
-      } else result.push(indexs[i]);
-    }
-    return result;
-  } else {
-    throw new Error("Invalid SwingExtremesType");
+): { index: Index; type: SwingExtremesType }[] {
+  try {
+    const peaks = findPeaksByGradient(y, level);
+    const peakObjs = peaks.map((index) => ({
+      index,
+      type: SwingExtremesType.Peak,
+    }));
+    const troughs = findTroughByGradient(y, level);
+    const troughObjs = troughs.map((index) => ({
+      index,
+      type: SwingExtremesType.Trough,
+    }));
+    const merge = peakObjs.concat(troughObjs);
+    return merge.sort((a, b) => a.index - b.index);
+  } catch (err) {
+    console.error(err);
+    return [];
   }
 }

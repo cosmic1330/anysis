@@ -24,12 +24,28 @@ describe("test SwingExtremes", () => {
   });
 
   it("test SwingExtremes Peak", () => {
-    const res = SwingExtremes(prices, SwingExtremesType.Peak);
-    expect(res).toEqual([1, 6, 10, 13 ]);
+    const arr = SwingExtremes(prices);
+    const res = arr.filter((x) => x.type === SwingExtremesType.Peak);
+    expect(res).toEqual(
+      [
+        { index: 1, type: "Peak" },
+        { index: 4, type: "Peak" },
+        { index: 6, type: "Peak" },
+        { index: 10, type: "Peak" },
+        { index: 13, type: "Peak" },
+      ]
+    );
   });
 
   it("test SwingExtremes Trough", () => {
-    const res = SwingExtremes(prices, SwingExtremesType.Trough);
-    expect(res).toEqual([2, 14]);
+    const arr = SwingExtremes(prices);
+    const res = arr.filter((x) => x.type === SwingExtremesType.Trough);
+    expect(res).toEqual([
+      { index: 2, type: "Trough" },
+      { index: 5, type: "Trough" },
+      { index: 8, type: "Trough" },
+      { index: 12, type: "Trough" },
+      { index: 14, type: "Trough" },
+    ]);
   });
 });
