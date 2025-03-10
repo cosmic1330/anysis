@@ -24,7 +24,7 @@ function DemoDay(stockId) {
       for (let i = 0; i < weekData.week.length; i++) {
         kdData = kd.next(weekData.week[i], kdData, 9);
       }
-      console.log(kdData);
+      console.log(weekData);
     })
     .catch((error) => {
       console.error(error);
