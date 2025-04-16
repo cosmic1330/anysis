@@ -13,7 +13,7 @@ describe("test kd methods", () => {
       res = kd.next(item, res, 9);
     }
     expect({
-      dataset:{
+      dataset: {
         c: realData.c,
         h: realData.h,
         l: realData.l,
@@ -23,7 +23,7 @@ describe("test kd methods", () => {
       k: realData.k,
       d: realData.d,
     }).toEqual({
-      dataset:{
+      dataset: {
         c: res.dataset[res.dataset.length - 1].c,
         h: res.dataset[res.dataset.length - 1].h,
         l: res.dataset[res.dataset.length - 1].l,
@@ -59,6 +59,7 @@ describe("test kd methods", () => {
       k: 64.41,
       d: 45.25,
       "k-d": 19.16,
+      j: 6.93,
     });
   });
 });

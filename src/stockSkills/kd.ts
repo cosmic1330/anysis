@@ -7,6 +7,7 @@ type ResKD = {
   k: number;
   d: number;
   "k-d": number;
+  j: number;
   [key: string]: unknown;
 };
 
@@ -16,6 +17,7 @@ export type KdResType = {
   k: number;
   d: number;
   "k-d": number;
+  j: number;
   type: number;
 };
 interface KdClassType {
@@ -32,6 +34,7 @@ export default class Kd implements KdClassType {
       k: 0,
       d: 0,
       "k-d": 0,
+      j: 0, // J value
       type,
     };
   }
@@ -46,6 +49,7 @@ export default class Kd implements KdClassType {
         k: 0,
         d: 0,
         "k-d": 0,
+        j: 0,
         type,
       };
     } else {
@@ -60,15 +64,19 @@ export default class Kd implements KdClassType {
       let k = (2 / 3) * (preList.k ? preList.k : 50) + (1 / 3) * rsv;
       let d = (2 / 3) * (preList.d ? preList.d : 50) + (1 / 3) * k;
       let k_d = k - d;
+      let j = 3 * d - 2 * k;
+      
       k = Math.round(k * 100) / 100;
       d = Math.round(d * 100) / 100;
       k_d = Math.round(k_d * 100) / 100;
+      j = Math.round(j * 100) / 100;
       return {
         dataset: preList.dataset,
         rsv,
         k,
         d,
         "k-d": k_d,
+        j,
         type,
       };
     }
@@ -104,6 +112,7 @@ export default class Kd implements KdClassType {
           k: 0,
           d: 0,
           "k-d": 0,
+          j: 0, 
         };
       else {
         const low = Math.min(...list.slice(i - 8, i + 1).map((item) => item.l));
@@ -116,10 +125,13 @@ export default class Kd implements KdClassType {
         let k = (2 / 3) * yesterdayK + (1 / 3) * rsv;
         let d = (2 / 3) * yesterdayD + (1 / 3) * k;
         let k_d = k - d;
+        let j = 3 * d - 2 * k;
+        
         k = Math.round(k * 100) / 100;
         d = Math.round(d * 100) / 100;
         k_d = Math.round(k_d * 100) / 100;
-        res[i] = { ...list[i], rsv, k, d, "k-d": k_d };
+        j = Math.round(j * 100) / 100;
+        res[i] = { ...list[i], rsv, k, d, "k-d": k_d, j };
         yesterdayK = k;
         yesterdayD = d;
       }

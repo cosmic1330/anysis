@@ -14,17 +14,12 @@ function DemoDay(stockId) {
       res = res.data.replace(/^\(|\);$/g, "");
       let parse = JSON.parse(res);
       let data = parse.ta;
-      let weekData = week.init(data[0]);
 
+      let kdData = kd.init(data[0], 9);
       for (let i = 1; i < data.length; i++) {
-        weekData = week.next(data[i], weekData);
+        kdData = kd.next(data[i], kdData, 9);
       }
-
-      let kdData = kd.init(weekData.week[0], 9);
-      for (let i = 0; i < weekData.week.length; i++) {
-        kdData = kd.next(weekData.week[i], kdData, 9);
-      }
-      console.log(weekData);
+      console.log(kdData);
     })
     .catch((error) => {
       console.error(error);
