@@ -1,9 +1,8 @@
 /* eslint @typescript-eslint/no-var-requires: "off" */
 const axios = require("axios");
-const { Week, Kd } = require("../dist/cjs/index.js");
+const { Kd } = require("../dist/cjs/index.js");
 
 // 使用示例
-const week = new Week();
 const kd = new Kd();
 function DemoDay(stockId) {
   axios

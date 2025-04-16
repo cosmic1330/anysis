@@ -64,7 +64,7 @@ export default class Kd implements KdClassType {
       let k = (2 / 3) * (preList.k ? preList.k : 50) + (1 / 3) * rsv;
       let d = (2 / 3) * (preList.d ? preList.d : 50) + (1 / 3) * k;
       let k_d = k - d;
-      let j = 3 * d - 2 * k;
+      let j = 3 * k - 2 * d;
       
       k = Math.round(k * 100) / 100;
       d = Math.round(d * 100) / 100;
@@ -125,7 +125,7 @@ export default class Kd implements KdClassType {
         let k = (2 / 3) * yesterdayK + (1 / 3) * rsv;
         let d = (2 / 3) * yesterdayD + (1 / 3) * k;
         let k_d = k - d;
-        let j = 3 * d - 2 * k;
+        let j = 3 * k - 2 * d;
         
         k = Math.round(k * 100) / 100;
         d = Math.round(d * 100) / 100;
