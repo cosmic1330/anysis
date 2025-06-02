@@ -9,31 +9,24 @@ type ResObv = { obv: number } & NewStockType;
 export type ObvResType = {
   dataset: StockListType;
   obv: number;
-  obvList: number[];
   preClose: number;
-  obvMa: number;
-  type: number;
 };
 
 interface ObvType {
-  init: (data: NewStockType, type: number) => ObvResType;
-  next: (data: NewStockType, preList: ObvResType, type: number) => ObvResType;
-
+  init: (data: NewStockType) => ObvResType;
+  next: (data: NewStockType, preList: ObvResType) => ObvResType;
   getObv: (list: NewStockListType, period: number) => ResObv[];
 }
 export default class Obv implements ObvType {
-  init(data: NewStockType, type: number): ObvResType {
+  init(data: NewStockType): ObvResType {
     return {
       dataset: [data],
       obv: data.v,
-      obvList: [data.v],
       preClose: data.c,
-      obvMa: 0,
-      type,
     };
   }
 
-  next(data: NewStockType, preList: ObvResType, type: number): ObvResType {
+  next(data: NewStockType, preList: ObvResType): ObvResType {
     const currentVolume = data.v;
     const currentClose = data.c;
     // obv
@@ -44,20 +37,10 @@ export default class Obv implements ObvType {
       obv -= currentVolume;
     }
 
-    // obv Ma
-    const obvList = preList.obvList;
-    obvList.push(obv);
-    if (obvList.length > type) obvList.shift();
-    const sum = obvList.reduce((pre, current) => pre + current, 0);
-    const vma = Math.round((sum / type) * 100) / 100;
-
     return {
       dataset: [...preList.dataset, data],
       obv,
       preClose: currentClose,
-      obvList,
-      obvMa: vma,
-      type,
     };
   }
 

@@ -32,6 +32,7 @@ export { default as dateFormat } from "./stockSkills/utils/dateFormat.js";
 export { default as Week } from "./stockSkills/week.js";
 export { default as Vma } from "./stockSkills/vma.js";
 export { default as Williams } from "./stockSkills/williams.js";
+export {default as ObvEma} from "./stockSkills/obv_ema.js";
 export { add } from "./test/add.js";
 export { minus } from "./test/minus.js";
 export { default as calculateDivisionFactor } from "./utils/calculateDivisionFactor.js";

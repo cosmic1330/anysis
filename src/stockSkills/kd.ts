@@ -1,16 +1,5 @@
 import { StockListType, StockType } from "./types";
 
-type ResRSV = { c: number; rsv: number; [key: string]: unknown };
-type ResKD = {
-  c: number;
-  rsv: number;
-  k: number;
-  d: number;
-  "k-d": number;
-  j: number;
-  [key: string]: unknown;
-};
-
 export type KdResType = {
   dataset: StockListType;
   rsv: number;
@@ -23,8 +12,6 @@ export type KdResType = {
 interface KdClassType {
   init: (data: StockType, type: number) => KdResType;
   next: (data: StockType, preList: KdResType, type: number) => KdResType;
-  getRSV: (list: StockListType) => ResRSV[];
-  getKD: (list: StockListType) => ResKD[];
 }
 export default class Kd implements KdClassType {
   init(data: StockType, type: number): KdResType {
@@ -80,62 +67,5 @@ export default class Kd implements KdClassType {
         type,
       };
     }
-  }
-
-  getRSV(list: StockListType): ResRSV[] {
-    const res: ResRSV[] = [];
-    for (let i = 0; i < list.length; i++) {
-      if (i < 8) res[i] = { ...list[i], rsv: 0 };
-      else {
-        const low = Math.min(...list.slice(i - 8, i + 1).map((item) => item.l));
-        const hight = Math.max(
-          ...list.slice(i - 8, i + 1).map((item) => item.h)
-        );
-        const close = list[i].c;
-        let rsv = ((close - low) / (hight - low)) * 100;
-        rsv = Math.round(rsv * 100) / 100;
-        res[i] = { ...list[i], rsv };
-      }
-    }
-    return res;
-  }
-
-  getKD(list: StockListType): ResKD[] {
-    const res = [];
-    let yesterdayK = 50;
-    let yesterdayD = 50;
-    for (let i = 0; i < list.length; i++) {
-      if (i < 8)
-        res[i] = {
-          ...list[i],
-          rsv: 0,
-          k: 0,
-          d: 0,
-          "k-d": 0,
-          j: 0, 
-        };
-      else {
-        const low = Math.min(...list.slice(i - 8, i + 1).map((item) => item.l));
-        const hight = Math.max(
-          ...list.slice(i - 8, i + 1).map((item) => item.h)
-        );
-        const close = list[i].c;
-        let rsv = ((close - low) / (hight - low)) * 100;
-        rsv = Math.round(rsv * 100) / 100;
-        let k = (2 / 3) * yesterdayK + (1 / 3) * rsv;
-        let d = (2 / 3) * yesterdayD + (1 / 3) * k;
-        let k_d = k - d;
-        let j = 3 * k - 2 * d;
-        
-        k = Math.round(k * 100) / 100;
-        d = Math.round(d * 100) / 100;
-        k_d = Math.round(k_d * 100) / 100;
-        j = Math.round(j * 100) / 100;
-        res[i] = { ...list[i], rsv, k, d, "k-d": k_d, j };
-        yesterdayK = k;
-        yesterdayD = d;
-      }
-    }
-    return res;
   }
 }
