@@ -1,9 +1,9 @@
 /* eslint @typescript-eslint/no-var-requires: "off" */
 const axios = require("axios");
-const { Mfi } = require("../dist/cjs/index.js");
+const { Ichimoku } = require("../dist/cjs/index.js");
 
 // 使用示例
-const mfi = new Mfi();
+const ad = new Ichimoku();
 function DemoDay(stockId) {
   axios
     .get(
@@ -45,11 +45,11 @@ function DemoDay(stockId) {
       }
 
 
-      let mfiData = mfi.init(response[0], 14);
+      let adData = ad.init(response[0], 14);
       for (let i = 1; i < response.length; i++) {
-        mfiData = mfi.next(response[i], mfiData, 14);
+        adData = ad.next(response[i], adData, 14);
       }
-      console.log(mfiData);
+      console.log(adData);
     })
     .catch((error) => {
       console.error(error);
