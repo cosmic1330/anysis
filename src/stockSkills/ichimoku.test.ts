@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import IchimokuCloud from "./ichimoku";
+import Ichimoku from "./ichimoku";
 import { StockType } from "./types"; // 引用原本的型別定義
 
 // 輔助函式：快速產生測試用的假資料
@@ -18,11 +18,11 @@ const createStock = (
   };
 };
 
-describe("IchimokuCloud Algo", () => {
-  let ichimoku: IchimokuCloud;
+describe("Ichimoku Algo", () => {
+  let ichimoku: Ichimoku;
 
   beforeEach(() => {
-    ichimoku = new IchimokuCloud();
+    ichimoku = new Ichimoku();
   });
 
   describe("init", () => {
@@ -142,7 +142,7 @@ describe("IchimokuCloud Algo", () => {
       // 所以我們用更簡單的方法：在 next 過程中精準控制
 
       // --- 重來：精準控制版 ---
-      const ichi = new IchimokuCloud();
+      const ichi = new Ichimoku();
       let r = ichi.init(createStock(0, { h: 120, l: 80 })); // Kijun Range: H=120, L=80
 
       // 填滿中間 16 筆 (Index 1~16)，數值平穩不影響極值，且不讓 Tenkan 抓到

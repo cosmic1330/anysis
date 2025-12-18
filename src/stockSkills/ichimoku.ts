@@ -22,7 +22,7 @@ interface IchimokuType {
   next: (data: NewStockType, preList: IchimokuResType) => IchimokuResType;
 }
 
-export default class IchimokuCloud implements IchimokuType {
+export default class Ichimoku implements IchimokuType {
   init(data: NewStockType): IchimokuResType {
     const dataset = [data];
     return {
