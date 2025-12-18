@@ -35,6 +35,7 @@ export { default as Williams } from "./stockSkills/williams.js";
 export { default as ObvEma} from "./stockSkills/obv_ema.js";
 export { default as Mfi } from "./stockSkills/mfi.js";
 export { default as Ichimoku } from "./stockSkills/ichimoku.js";
+export { default as Dmi } from "./stockSkills/dmi.js";
 export { add } from "./test/add.js";
 export { minus } from "./test/minus.js";
 export { default as calculateDivisionFactor } from "./utils/calculateDivisionFactor.js";
